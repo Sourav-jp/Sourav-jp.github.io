@@ -4,84 +4,154 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sourav J Prakash — Cyber Security Analyst</title>
-  <meta name="description" content="Portfolio of Sourav J Prakash — Cyber Security Analyst. Contact: souravjprakashsourav@gmail.com" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Portfolio and resume of Sourav J Prakash — Cyber Security Analyst." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="container">
-      <h1>Sourav J Prakash</h1>
-      <img src="Profile.jpg" alt="Sourav J Prakash profile picture" id="profile-pic">
-      <p class="title">CYBER SECURITY ANALYST</p>
-      <p class="meta">Kottayam • +91 9946768259 • <a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></p>
-      <p class="meta"><a href="https://www.linkedin.com/in/sourav-j-prakash-01a883319" target="_blank" rel="noopener">LinkedIn</a></p>
-      <a class="btn" href="#contact">Contact</a>
-      <a class="btn ghost" href="Sourav_resume.pdf" target="_blank">View Resume (PDF)</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="#home">Sourav J Prakash</a>
+      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <nav id="nav" class="nav" role="navigation" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
   </header>
 
-  <main class="container">
-    <section id="about">
-      <h2>About</h2>
-      <p>I am a passionate cybersecurity analyst experienced in ethical hacking, vulnerability assessment and threat analysis. I enjoy hands‑on labs, CTFs and continuous learning to keep up with evolving threats.</p>
-    </section>
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h1>Hello — I'm Sourav J Prakash</h1>
+          <p class="muted">CYBER SECURITY ANALYST</p>
+          <p class="hero-role">I am <span id="typed" aria-live="polite"></span></p>
+          <div class="hero-ctas">
+            <a class="btn" href="#contact">Contact Me</a>
+            <a class="btn btn-outline" href="assets/SouravJPrakash_CV.pdf" target="_blank" rel="noopener">Download CV</a>
+          </div>
+        </div>
 
-    <section id="skills">
-      <h2>Skills & Tools</h2>
-      <ul class="grid-list">
-        <li>Nmap</li>
-        <li>Netdiscover</li>
-        <li>JohnTheRipper</li>
-        <li>Hydra / Medusa</li>
-        <li>Binwalk</li>
-        <li>Wireshark</li>
-        <li>Metasploit / ExploitDB</li>
-        <li>Burp Suite</li>
-        <li>Gobuster</li>
-        <li>C / C++ / Java / Python / MySQL</li>
-      </ul>
-    </section>
-
-    <section id="projects">
-      <h2>Selected Projects</h2>
-      <div class="card-grid">
-        <article class="card">
-          <h3>Petvet</h3>
-          <p>Online veterinary clinic / pet care booking website. Built as a full‑stack project (frontend + backend).</p>
-        </article>
-        <article class="card">
-          <h3>Walkwell</h3>
-          <p>Online footwear shopping site — e‑commerce project showcasing product pages and cart flow.</p>
-        </article>
+        <aside class="hero-card" aria-labelledby="contact-heading">
+          <div class="card-inner">
+            <h3 id="contact-heading">Contact</h3>
+            <p>Kottayam • +91 9946768259</p>
+            <p><a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></p>
+            <p><a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a></p>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section id="experience">
-      <h2>Experience & Training</h2>
-      <ul>
-        <li><strong>Cyber Security Analyst — Offenso Hackers Academy (training)</strong><br/>Hands‑on labs, penetration testing, vulnerability assessments, CTF participation.</li>
-      </ul>
+    <!-- ABOUT / PROFILE -->
+    <section id="about" class="about reveal">
+      <div class="container">
+        <h2>Profile</h2>
+        <p>I am a passionate Cyber Security Analyst & aspirant with a Bachelor’s degree in Computer Applications (BCA) and a strong foundation in web development, ethical hacking, and threat analysis. Skilled in identifying vulnerabilities and implementing security measures, I aim to enhance organizational security and ensure data integrity while growing as a cybersecurity professional.</p>
+
+        <div class="two-col">
+          <div>
+            <h3>Education</h3>
+            <p><strong>Bachelor of Computer Applications</strong><br>CMS College Kottayam (2021 - 2024)</p>
+            <p><strong>Offenso Certified Security Analyst (OCSA)</strong><br>Security Analyst - Version 3.0 (NCVET/MSDE)</p>
+          </div>
+
+          <div>
+            <h3>Skills & Tools</h3>
+            <ul class="skills-list">
+              <li>Languages: C, C++, Java, Python, MySQL</li>
+              <li>Tools: Nmap, Wireshark, Metasploit, Burpsuite, JohnTheRipper, Hydra, Gobuster, Binwalk</li>
+              <li>Areas: Vulnerability Assessment, Penetration Testing, Threat Analysis, Security Protocols</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="education">
-      <h2>Education & Certifications</h2>
-      <ul>
-        <li>Bachelor of Computer Applications — 2021–2024, CMS College Kottayam</li>
-        <li>Offenso Certified Security Analyst (OCSA) — Security Analyst Version 3.0 (NCVET / MSDE)</li>
-      </ul>
+    <!-- PROJECTS -->
+    <section id="projects" class="projects reveal">
+      <div class="container">
+        <h2>Projects</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Petvet</h3>
+            <p>Online veterinary clinic and pet care booking website.</p>
+            <p><a href="#" onclick="alert('Add live/demo link for Petvet')">View</a></p>
+          </article>
+
+          <article class="card">
+            <h3>Walkwell</h3>
+            <p>Footwear e-commerce website (UI + checkout flow).</p>
+            <p><a href="#" onclick="alert('Add live/demo link for Walkwell')">View</a></p>
+          </article>
+
+          <article class="card">
+            <h3>Marvel CTF</h3>
+            <p>CTF challenges and hardware hacking labs run at Offenso Hackers Academy.</p>
+            <p><a href="#" onclick="alert('Add CTF writeups or repo link')">View</a></p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>If you want to reach Sourav, email him directly:</p>
-      <p><a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></p>
-      <p>Or call: +91 9946768259</p>
+    <!-- EXPERIENCE -->
+    <section id="experience" class="experience reveal">
+      <div class="container">
+        <h2>Experience</h2>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>Cyber Security Analyst — Offenso Hackers Academy</h4>
+            <span class="date">JUN '24 - JAN '25</span>
+            <p>Conducted hands-on labs and real-world cybersecurity simulations, performed vulnerability assessments, penetration testing and security auditing. Implemented security controls and continuously monitored emerging threats and best practices.</p>
+          </div>
+        </div>
+
+        <h3>Achievements & Volunteering</h3>
+        <ul>
+          <li>“Marvel CTF” by Offenso Hackers Academy</li>
+          <li>Hardware Hacking workshops</li>
+          <li>Volunteer — Na‑Node (Hardware Village) & Kerala Cyber Suraksha Bhadratha Mission (KCBM)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact reveal">
+      <div class="container">
+        <h2>Contact</h2>
+        <p>If you'd like to connect, email me or use the contact form below.</p>
+
+        <form class="contact-form" onsubmit="event.preventDefault(); handleContactSubmit();">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" required>
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" required>
+          </label>
+
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" required></textarea>
+          </label>
+
+          <button class="btn" type="submit">Send</button>
+        </form>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <div class="container">
-      <small>© <span id="year"></span> Sourav J Prakash — Cyber Security Analyst</small>
+      <p>© <span id="year"></span> Sourav J Prakash — Cyber Security Analyst</p>
     </div>
   </footer>
 
