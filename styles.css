@@ -37,10 +37,84 @@ body{
 .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:1rem;border-radius:var(--radius)}
 .card-inner h3{margin:0 0 0.5rem}
 / Sections /
-section{padding:2.25rem 0}
-h2{margin:0 0 1rem;font-size:1.25rem}
-.reveal{opacity:0;transform:translateY(12px);transition:all 600ms cubic-bezier(.2,.9,.3,1)}
-.reveal.show{opacity:1;transform:none}
+/ Education styles /
+#education {
+ / container /
+ display: block;
+ margin: 1.5rem 0;
+ padding: 1rem;
+ background: transparent; / change to a card color if you want /
+ border-radius: 10px;
+}
+#education h3 {
+ margin: 0 0 0.75rem;
+ font-size: 1.125rem;
+ color: var(--accent, #4fd1c5);
+ letter-spacing: 0.4px;
+}
+/ each education row /
+.education-item {
+ margin: 0 0 0.6rem;
+ color: var(--text, #e6eef8); / add --text to :root if needed /
+ font-weight: 600;
+ line-height: 1.35;
+ display: block;
+/ subtle reveal animation (optional) /
+ transform: translateY(6px);
+ opacity: 0;
+ transition: transform 360ms ease, opacity 360ms ease;
+}
+/ degree name styling /
+.education-item .degree {
+ display: block;
+ color: var(--white, #ffffff);
+ font-weight: 700;
+ font-size: 1rem;
+}
+/ school / extra info on next line /
+.education-item .school {
+ display: block;
+ color: var(--muted, #9bb0c7);
+ font-weight: 500;
+ font-size: 0.95rem;
+ margin-top: 0.18rem;
+}
+/ period / year (right aligned on wide screens) /
+.education-item .period {
+ color: var(--muted, #9bb0c7);
+ font-size: 0.9rem;
+ font-weight: 500;
+ opacity: 0.95;
+}
+/ two-column layout for larger screens (if you want skills beside education) /
+@media (min-width: 900px) {
+ .about-two-col {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 2rem;
+ align-items: start;
+ }
+/ make period float/right within the same line if used /
+ .education-item-row {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ gap: 1rem;
+ }
+}
+/ small-screen adjustments /
+@media (max-width: 599px) {
+ #education {
+ padding: 0.75rem 0.5rem;
+ }
+ .education-item .degree { font-size: 0.98rem; }
+ .education-item .school { font-size: 0.88rem; }
+}
+/ visible state for reveal animation /
+.education-item.visible {
+ transform: translateY(0);
+ opacity: 1;
+}
 / layout /
 .two-col{display:grid;grid-template-columns:1fr;gap:1rem}
 .grid{display:grid;grid-template-columns:1fr;gap:1rem}
