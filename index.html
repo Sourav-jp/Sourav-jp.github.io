@@ -5,24 +5,24 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Your Name — Cyber Security Portfolio</title>
   <meta name="description" content="Portfolio — Cyber Security & Ethical Hacking" />
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- Fonts: Audiowide for headings, Roboto Mono for body -->
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <!-- Canvas background -->
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <header class="site-header container">
+  <header class="site-header container" role="banner">
     <div class="brand"><a href="#hero">Your Name</a></div>
 
     <nav class="nav" id="nav" aria-label="Primary navigation">
       <a href="#hero">Home</a>
-      <a href="#languages">Languages</a>
+      <a href="#languages">Technical Skills</a>
       <a href="#projects">Projects</a>
       <a href="#education">Education</a>
       <a href="#contact">Contact</a>
-      <a class="btn-outline" href="resume.pdf" download>Download resume</a>
+      <a class="btn-outline" href="resume.pdf" target="_blank" rel="noopener">Resume</a>
     </nav>
 
     <button id="nav-toggle" class="nav-toggle" aria-label="Open navigation">☰</button>
@@ -33,8 +33,8 @@
     <section id="hero" class="hero container">
       <div class="hero-inner">
         <div class="hero-left reveal">
-          <h1 class="hero-title neon">Your Name</h1>
-          <p class="hero-sub mono">Ethical Hacker · Cyber Security Enthusiast · Digital Forensics Learner</p>
+          <h1 class="hero-title glow">Your Name</h1>
+          <p class="hero-sub mono">Ethical Hacker · Cyber Security Enthusiast</p>
           <div class="hero-ctas">
             <a class="btn" href="#projects">View Projects</a>
             <a class="btn btn-ghost" href="#contact">Contact</a>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="hero-right reveal hero-pop" aria-hidden="true">
-          <!-- White arch portrait (kept) — replace avatar.jpg with your portrait -->
+          <!-- White arch portrait — replace avatar.jpg with your portrait -->
           <div class="hero-arch">
             <img src="avatar.jpg" alt="Portrait" class="avatar-photo" />
           </div>
@@ -50,120 +50,176 @@
       </div>
     </section>
 
-    <!-- PROFILE SUMMARY (first revealed after hero) -->
+    <!-- PROFILE SUMMARY -->
     <section id="profile" class="section container reveal">
       <div class="card profile-card">
-        <h2 class="neon small">Profile Summary</h2>
+        <h2 class="section-title highlight">Profile Summary</h2>
         <p class="mono">
-          Hands-on cybersecurity practitioner specializing in vulnerability assessment, penetration testing and secure web development.
-          I participate in CTFs and community security workshops to strengthen practical skills and defensive techniques.
+          I am a hands-on Cyber Security Analyst focused on identifying and remediating vulnerabilities across web and networked systems.
+          My work covers vulnerability assessment, penetration testing, secure development practices and incident response.
+          I regularly participate in capture‑the‑flag (CTF) events, community security workshops, and hardware security meetups to sharpen practical skills.
+          I emphasize practical remediation, clear reporting and collaboration with engineering teams to reduce risk and harden applications.
         </p>
       </div>
     </section>
 
-    <!-- PROGRAMMING LANGUAGES (with images) -->
+    <!-- Section divider -->
+    <div class="section-divider" aria-hidden="true"><span></span></div>
+
+    <!-- TECHNICAL SKILLS (languages + tools combined) -->
     <section id="languages" class="section container">
-      <h2 class="reveal neon">Programming Languages</h2>
-      <p class="section-sub mono reveal">Icon + name — click to view example code or projects.</p>
+      <h2 class="section-title highlight reveal">Technical Skills</h2>
+      <p class="section-sub mono reveal">Programming languages and cybersecurity tools I use daily — icon + name.</p>
 
-      <div class="lang-grid">
-        <!-- Replace these icons in icons/ with your preferred SVG/PNG files -->
-        <div class="lang-badge reveal">
-          <img src="icons/js.png" alt="JavaScript" class="lang-img" />
-          <div class="lang-name mono">JavaScript</div>
+      <div class="card card-grid reveal">
+        <div class="lang-grid">
+          <!-- Replace icons/ files with your actual images -->
+          <div class="lang-badge">
+            <img src="icons/js.png" alt="JavaScript" class="lang-img" />
+            <div class="lang-name mono">JavaScript</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/py.png" alt="Python" class="lang-img" />
+            <div class="lang-name mono">Python</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/c.png" alt="C" class="lang-img" />
+            <div class="lang-name mono">C</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/cpp.png" alt="C++" class="lang-img" />
+            <div class="lang-name mono">C++</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/java.png" alt="Java" class="lang-img" />
+            <div class="lang-name mono">Java</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/sql.png" alt="MySQL" class="lang-img" />
+            <div class="lang-name mono">MySQL</div>
+          </div>
         </div>
 
-        <div class="lang-badge reveal">
-          <img src="icons/py.png" alt="Python" class="lang-img" />
-          <div class="lang-name mono">Python</div>
+        <!-- Cybersecurity tools (icons). Replace tools/* with your images -->
+        <div class="tools-grid">
+          <h3 class="tools-title mono">Cybersecurity Tools</h3>
+          <div class="tools-row">
+            <div class="tool-item">
+              <img src="tools/nmap.png" alt="Nmap" class="tool-img" />
+              <div class="tool-name mono">Nmap</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/wireshark.png" alt="Wireshark" class="tool-img" />
+              <div class="tool-name mono">Wireshark</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/metasploit.png" alt="Metasploit" class="tool-img" />
+              <div class="tool-name mono">Metasploit</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/burpsuite.png" alt="Burp Suite" class="tool-img" />
+              <div class="tool-name mono">Burp Suite</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/jtr.png" alt="John the Ripper" class="tool-img" />
+              <div class="tool-name mono">JohnTheRipper</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/gobuster.png" alt="Gobuster" class="tool-img" />
+              <div class="tool-name mono">Gobuster</div>
+            </div>
+          </div>
         </div>
-
-        <div class="lang-badge reveal">
-          <img src="icons/c.png" alt="C" class="lang-img" />
-          <div class="lang-name mono">C</div>
-        </div>
-
-        <div class="lang-badge reveal">
-          <img src="icons/cpp.png" alt="C++" class="lang-img" />
-          <div class="lang-name mono">C++</div>
-        </div>
-
-        <div class="lang-badge reveal">
-          <img src="icons/java.png" alt="Java" class="lang-img" />
-          <div class="lang-name mono">Java</div>
-        </div>
-
-        <div class="lang-badge reveal">
-          <img src="icons/sql.png" alt="MySQL" class="lang-img" />
-          <div class="lang-name mono">MySQL</div>
-        </div>
-      </div>
-
-      <div class="tools-card card reveal">
-        <h3 class="neon small">Cybersecurity Tools</h3>
-        <p class="mono muted">Nmap · Wireshark · Metasploit · Burp Suite · JohnTheRipper · Hydra · Binwalk · Gobuster · ExploitDB</p>
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="section container">
-      <h2 class="reveal neon">Projects</h2>
-      <p class="section-sub mono reveal">Selected projects and case studies.</p>
+    <div class="section-divider"><span></span></div>
 
-      <div class="grid projects-grid">
-        <article class="card reveal">
-          <h3 class="neon small">Petvet — Booking</h3>
-          <p class="muted mono">Secure booking application with role-based access and appointment flows.</p>
-        </article>
-
-        <article class="card reveal">
-          <h3 class="neon small">Walkwell — E‑commerce</h3>
-          <p class="muted mono">Responsive store frontend with focus on secure checkout patterns.</p>
-        </article>
-
-        <article class="card reveal">
-          <h3 class="neon small">Na‑Node — Hardware Hacking</h3>
-          <p class="muted mono">Hardware security experiments and community workshops.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- EDUCATION -->
-    <section id="education" class="section container reveal">
+    <!-- ACHIEVEMENTS -->
+    <section id="achievements" class="section container reveal">
+      <h2 class="section-title highlight">Achievements</h2>
       <div class="card">
-        <h2 class="neon small">Education</h2>
-        <ul class="facts mono">
-          <li>BCA — CMS College, Kottayam (2021–2024)</li>
-          <li>Offenso Certified Security Analyst (OCSA)</li>
+        <ul class="achievements mono">
+          <li>Offenso Certified Security Analyst (OCSA) — Security Analyst v3.0 (NCVET / MSDE).</li>
+          <li>Active participant in CTFs and local security meetups; contributed to Na‑Node hardware hacking community events.</li>
+          <li>Implemented secure authentication and role-based access controls in multiple web projects.</li>
         </ul>
       </div>
     </section>
 
+    <div class="section-divider"><span></span></div>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section container">
+      <h2 class="section-title highlight reveal">Projects</h2>
+      <p class="section-sub mono reveal">Selected project highlights emphasizing security and web development.</p>
+
+      <div class="grid projects-grid">
+        <article class="card reveal">
+          <h3 class="mono">Petvet — Online booking</h3>
+          <p class="muted mono">Secure booking system with admin controls, appointment flow and user profiles.</p>
+        </article>
+
+        <article class="card reveal">
+          <h3 class="mono">Walkwell — E‑commerce frontend</h3>
+          <p class="muted mono">Mobile-first responsive storefront with secure checkout patterns.</p>
+        </article>
+
+        <article class="card reveal">
+          <h3 class="mono">Na‑Node — Hardware hacking & community</h3>
+          <p class="muted mono">Embedded device security experiments and workshop facilitation.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="section-divider"><span></span></div>
+
+    <!-- EDUCATION -->
+    <section id="education" class="section container reveal">
+      <h2 class="section-title highlight">Education</h2>
+      <div class="card">
+        <ul class="facts mono">
+          <li>Bachelor of Computer Applications (BCA), CMS College, Kottayam (2021–2024).</li>
+          <li>Currently pursuing MCA at Lead College of Management (ongoing).</li>
+        </ul>
+        <p class="mono muted">Continuing academic focus on secure software design, networking and applied cryptography as part of the MCA programme.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"><span></span></div>
+
     <!-- CONTACT -->
     <section id="contact" class="section container reveal">
-      <h2 class="neon">Contact</h2>
-      <p class="mono">Interested in collaborating? Send a message or email me directly.</p>
+      <h2 class="section-title highlight">Contact</h2>
+      <div class="card">
+        <p class="mono">Interested in collaborating or discussing a security challenge? Reach out via email or the form below.</p>
 
-      <form id="contact-form" class="contact-form" action="https://formspree.io/f/your-id" method="POST">
-        <label>
-          <span class="label-text mono">Name</span>
-          <input name="name" type="text" required />
-        </label>
+        <form id="contact-form" class="contact-form" action="https://formspree.io/f/your-id" method="POST">
+          <label>
+            <span class="label-text mono">Name</span>
+            <input name="name" type="text" required />
+          </label>
 
-        <label>
-          <span class="label-text mono">Email</span>
-          <input name="email" type="email" required />
-        </label>
+          <label>
+            <span class="label-text mono">Email</span>
+            <input name="email" type="email" required />
+          </label>
 
-        <label>
-          <span class="label-text mono">Message</span>
-          <textarea name="message" rows="5" required></textarea>
-        </label>
+          <label>
+            <span class="label-text mono">Message</span>
+            <textarea name="message" rows="5" required></textarea>
+          </label>
 
-        <div class="form-actions">
-          <button type="submit" class="btn">Send message</button>
-        </div>
-      </form>
+          <div class="form-actions">
+            <button type="submit" class="btn">Send message</button>
+          </div>
+        </form>
+      </div>
     </section>
   </main>
 
