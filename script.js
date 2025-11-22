@@ -4,7 +4,6 @@
   const ctx = canvas.getContext('2d')
   let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1)
   let columns = []
-  // Mixed glyphs for Matrix-like look (kana + hex + ascii)
   const glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ0123456789ABCDEFabcdef<>/\\|[]{}()@#$%*+-_=;:;'
 
   function fit() {
@@ -21,7 +20,7 @@
 
   function initColumns() {
     columns = []
-    const base = Math.max(12, Math.floor(Math.min(W, H) / 68)) // smaller → denser
+    const base = Math.max(12, Math.floor(Math.min(W, H) / 68))
     const cols = Math.ceil(W / base)
     for (let i = 0; i < cols; i++) {
       columns.push({
@@ -33,7 +32,7 @@
     }
   }
 
-  // floating particles (soft circles) for depth
+  // soft floating particles for depth
   const particles = []
   function initParticles() {
     particles.length = 0
@@ -57,7 +56,7 @@
     ctx.fillStyle = g
     ctx.fillRect(0, 0, W, H)
 
-    // floating aqua particles
+    // particles
     for (let p of particles) {
       ctx.beginPath()
       ctx.fillStyle = `rgba(0,240,168,${p.alpha})`
@@ -87,10 +86,10 @@
       ctx.restore()
     }
 
-    // columns of glyphs
+    // glyph columns
     for (let col of columns) {
-      ctx.font = `${col.font}px "Share Tech Mono", monospace`
-      // lead char (bright)
+      ctx.font = `${col.font}px "Roboto Mono", monospace`
+      // lead char
       const lead = glyphs.charAt(Math.floor(Math.random() * glyphs.length))
       ctx.fillStyle = 'rgba(0,255,190,0.98)'
       ctx.shadowColor = 'rgba(0,240,168,0.9)'
@@ -105,7 +104,6 @@
         ctx.fillText(ch, col.x, col.y - t * col.font)
       }
 
-      // occasional tiny code blocks for dev-look
       if (Math.random() > 0.995) {
         ctx.fillStyle = 'rgba(0,240,168,0.04)'
         ctx.fillRect(col.x + 6, col.y - 4, 18, 10)
@@ -128,13 +126,13 @@
   initParticles()
   requestAnimationFrame(draw)
 
-  // ---------------- UI interactions & reveal-on-scroll ----------------
+  // UI interactions & reveal-on-scroll
   document.addEventListener('DOMContentLoaded', () => {
     // set year
     const yearEl = document.getElementById('year')
     if (yearEl) yearEl.textContent = new Date().getFullYear()
 
-    // nav toggle for mobile
+    // nav toggle
     const navToggle = document.getElementById('nav-toggle')
     const nav = document.getElementById('nav')
     navToggle && navToggle.addEventListener('click', () => {
@@ -143,7 +141,7 @@
       nav.style.display = shown ? 'none' : 'flex'
     })
 
-    // smooth scroll anchors
+    // smooth anchors
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', (e) => {
         const href = a.getAttribute('href')
@@ -156,7 +154,7 @@
       })
     })
 
-    // reveal on scroll with IntersectionObserver + stagger
+    // reveal on scroll
     const reveals = Array.from(document.querySelectorAll('.reveal'))
     const ro = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -168,15 +166,15 @@
     }, { threshold: 0.12 })
 
     reveals.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(0.55, i * 0.06)}s`
+      el.style.transitionDelay = `${Math.min(0.6, i * 0.06)}s`
       ro.observe(el)
     })
 
-    // hero pop in
+    // hero pop
     const heroPop = document.querySelector('.hero-pop')
     if (heroPop) setTimeout(() => heroPop.classList.add('in-view'), 360)
 
-    // contact form demo handler
+    // contact form demo
     const form = document.getElementById('contact-form')
     if (form) {
       form.addEventListener('submit', (e) => {
