@@ -3,27 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sourav J Prakash — Portfolio</title>
-  <meta name="description" content="Sourav J Prakash — Cyber Security Analyst" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Portfolio — developer & cybersecurity enthusiast." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Canvas background -->
+  <!-- Canvas background for hacker/matrix effect -->
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand">
-        <a href="#hero">Sourav J Prakash</a>
+        <a href="#hero">Your Name</a>
       </div>
 
-      <nav class="nav" id="nav">
+      <nav class="nav" id="nav" aria-label="Primary">
         <a href="#hero">Home</a>
         <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
+        <a href="#languages">Programming Language</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-        <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">🌓</button>
+        <a class="btn-outline" href="resume.pdf" download>Download resume</a>
       </nav>
 
       <button id="nav-toggle" class="nav-toggle" aria-label="Open navigation">☰</button>
@@ -31,152 +31,115 @@
   </header>
 
   <main>
-    <section id="hero" class="hero container section-anim">
-      <div class="hero-left">
-        <h1 class="reveal">Hi, I'm <span class="accent">Sourav J Prakash</span></h1>
-        <p class="lead reveal delay-1">
-          I am a passionate Cyber Security Analyst & aspirant with a Bachelor's degree in Computer Applications (BCA).
-          I have a solid foundation in web development, ethical hacking and threat analysis. I focus on identifying vulnerabilities,
-          implementing security controls and improving organizational security posture.
-        </p>
-        <div class="hero-ctas reveal delay-2">
-          <a class="btn" href="#projects">View projects</a>
-          <a class="btn btn-outline" href="resume.pdf" download>Download resume</a>
+    <!-- HERO -->
+    <section id="hero" class="hero container">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <h1 class="hero-title">Hi, I'm <span class="accent">Your Name</span></h1>
+          <p class="hero-sub">Cyber Security Analyst & Developer — I secure, test and build resilient web systems.</p>
+          <div class="hero-ctas">
+            <a class="btn" href="#projects">View Projects</a>
+            <a class="btn btn-ghost" href="#contact">Contact</a>
+          </div>
         </div>
 
-        <ul style="margin-top:1rem; color:var(--muted); line-height:1.6;">
-          <li><strong>Role:</strong> Cyber Security Analyst</li>
-          <li><strong>Location:</strong> Kottayam, India</li>
-          <li><strong>Email:</strong> <a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></li>
-          <li><strong>Phone:</strong> <a href="tel:+919946768259">+91 9946768259</a></li>
-          <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a></li>
-        </ul>
-      </div>
-
-      <div class="hero-right reveal delay-3" aria-hidden="true">
-        <div class="card-glass avatar">SJ</div>
+        <div class="hero-right">
+          <!-- White arch container. Replace avatar.jpg with your photo file (same folder). Ensure person photo is cropped so background is not white. -->
+          <div class="hero-arch">
+            <img src="avatar.jpg" alt="Portrait" class="avatar-photo" />
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="projects" class="section container section-anim">
-      <h2 class="section-title reveal">Selected Projects</h2>
-      <p class="section-sub reveal delay-1">A few highlights from my portfolio and cybersecurity work.</p>
+    <!-- PROJECTS -->
+    <section id="projects" class="section container">
+      <h2>Selected Projects</h2>
+      <p class="section-sub">Some highlights — links if available.</p>
 
       <div class="grid projects-grid">
-        <article class="card reveal delay-2">
-          <h3>Petvet</h3>
-          <p class="muted">An online veterinary clinic and pet care booking website — implemented booking flows and admin features for managing appointments and pet profiles.</p>
-          <p class="tags">Web · Booking · UX</p>
+        <article class="card">
+          <h3>Project One</h3>
+          <p class="muted">Short description of the project — what it does and your role.</p>
           <div class="card-actions">
-            <a href="#" class="btn-link" aria-disabled="true">Live</a>
-            <a href="#" class="btn-link" aria-disabled="true">Code</a>
+            <a href="#" class="btn-link">Live</a>
+            <a href="#" class="btn-link">Code</a>
           </div>
         </article>
 
-        <article class="card reveal delay-3">
-          <h3>Walkwell</h3>
-          <p class="muted">An online footwear e-commerce site (frontend + basic store backend). Focused on product listing, cart flows and mobile-first responsive UI.</p>
-          <p class="tags">Web · E‑commerce</p>
+        <article class="card">
+          <h3>Project Two</h3>
+          <p class="muted">Short description of the project — security focus or feature highlight.</p>
           <div class="card-actions">
-            <a href="#" class="btn-link" aria-disabled="true">Live</a>
-            <a href="#" class="btn-link" aria-disabled="true">Code</a>
+            <a href="#" class="btn-link">Live</a>
+            <a href="#" class="btn-link">Code</a>
           </div>
-        </article>
-
-        <article class="card reveal delay-4">
-          <h3>Na-Node (Hardware Village)</h3>
-          <p class="muted">Hardware hacking & security exploration for embedded devices — part of community events and hands-on sessions.</p>
-          <p class="tags">Hardware · Hacking · CTFs</p>
         </article>
       </div>
     </section>
 
-    <section id="skills" class="section container section-anim">
-      <h2 class="section-title reveal">Skills</h2>
+    <!-- PROGRAMMING LANGUAGES -->
+    <section id="languages" class="section container">
+      <h2>Programming Languages</h2>
+      <p class="section-sub">Key languages I use — name and symbol.</p>
 
-      <div class="skills-grid">
-        <div class="skill-item reveal delay-1">
-          <div class="skill-head">
-            <strong>Python</strong>
-            <span class="muted percent">85%</span>
-          </div>
-          <div class="skill-bar" data-percent="85"><span></span></div>
+      <div class="lang-grid">
+        <div class="lang-badge">
+          <div class="lang-symbol">JS</div>
+          <div class="lang-name">JavaScript</div>
         </div>
 
-        <div class="skill-item reveal delay-2">
-          <div class="skill-head">
-            <strong>C</strong>
-            <span class="muted percent">75%</span>
-          </div>
-          <div class="skill-bar" data-percent="75"><span></span></div>
+        <div class="lang-badge">
+          <div class="lang-symbol">PY</div>
+          <div class="lang-name">Python</div>
         </div>
 
-        <div class="skill-item reveal delay-3">
-          <div class="skill-head">
-            <strong>C++</strong>
-            <span class="muted percent">70%</span>
-          </div>
-          <div class="skill-bar" data-percent="70"><span></span></div>
+        <div class="lang-badge">
+          <div class="lang-symbol">C</div>
+          <div class="lang-name">C</div>
         </div>
 
-        <div class="skill-item reveal delay-4">
-          <div class="skill-head">
-            <strong>Java</strong>
-            <span class="muted percent">70%</span>
-          </div>
-          <div class="skill-bar" data-percent="70"><span></span></div>
+        <div class="lang-badge">
+          <div class="lang-symbol">C++</div>
+          <div class="lang-name">C++</div>
         </div>
 
-        <div class="skill-item reveal delay-5">
-          <div class="skill-head">
-            <strong>MySQL</strong>
-            <span class="muted percent">65%</span>
-          </div>
-          <div class="skill-bar" data-percent="65"><span></span></div>
+        <div class="lang-badge">
+          <div class="lang-symbol">JV</div>
+          <div class="lang-name">Java</div>
         </div>
-      </div>
 
-      <div style="margin-top:1rem" class="reveal delay-6">
-        <h3 style="margin-bottom:0.4rem">Cybersecurity tools</h3>
-        <p class="muted">Nmap · netdiscovery · JohnTheRipper · Hydra · Medusa · Binwalk · Wireshark · Metasploit · ExploitDB · Burpsuite · Gobuster</p>
+        <div class="lang-badge">
+          <div class="lang-symbol">SQL</div>
+          <div class="lang-name">MySQL</div>
+        </div>
       </div>
     </section>
 
-    <section id="about" class="section container section-anim">
-      <h2 class="section-title reveal">About & Education</h2>
+    <!-- ABOUT -->
+    <section id="about" class="section container">
+      <h2>About</h2>
       <div class="about-grid">
-        <div class="reveal delay-1">
-          <p>
-            I aim to identify and remediate vulnerabilities, improve security controls and ensure data integrity.
-            I have hands-on experience from labs, CTFs and community projects, and I continually research emerging threats and defensive techniques.
-          </p>
-
-          <h3 style="margin-top:0.75rem">Certifications</h3>
-          <ul class="facts">
-            <li>Offenso Certified Security Analyst (OCSA) — Security Analyst v3.0 (NCVET / MSDE)</li>
-          </ul>
+        <div>
+          <p>I am focused on practical security — vulnerability assessment, penetration testing and secure web development. I hold practical certifications and participate in CTFs and community security initiatives.</p>
         </div>
 
-        <div class="reveal delay-2">
-          <h3>Education</h3>
+        <div>
+          <h3>Education & Certification</h3>
           <ul class="facts">
-            <li>Bachelor of Computer Applications (BCA), 2021–2024 — CMS College, Kottayam</li>
+            <li>Bachelor of Computer Applications — CMS College, Kottayam</li>
+            <li>Offenso Certified Security Analyst (OCSA)</li>
           </ul>
-
-          <h3 style="margin-top:0.6rem">Languages</h3>
-          <p class="muted">English · Malayalam · Tamil</p>
-
-          <h3 style="margin-top:0.6rem">Soft skills</h3>
-          <p class="muted">Teamwork · Leadership · Coordination · Delegation · Multitasking · Decisiveness</p>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="section container section-anim">
-      <h2 class="section-title reveal">Contact</h2>
-      <p class="reveal delay-1">Interested in working together or discussing a security challenge? Reach out.</p>
+    <!-- CONTACT -->
+    <section id="contact" class="section container">
+      <h2>Contact</h2>
+      <p>Interested in collaborating? Reach out via email or the form below.</p>
 
-      <form id="contact-form" class="contact-form reveal delay-2" action="https://formspree.io/f/your-id" method="POST">
+      <form id="contact-form" class="contact-form" action="https://formspree.io/f/your-id" method="POST">
         <label>
           <span class="label-text">Name</span>
           <input name="name" type="text" required />
@@ -184,7 +147,7 @@
 
         <label>
           <span class="label-text">Email</span>
-          <input name="email" type="email" required value="souravjprakashsourav@gmail.com" />
+          <input name="email" type="email" required />
         </label>
 
         <label>
@@ -196,20 +159,15 @@
           <button type="submit" class="btn">Send message</button>
         </div>
       </form>
-
-      <div style="margin-top:1.25rem" class="reveal delay-3">
-        <strong>Phone:</strong> <a href="tel:+919946768259">+91 9946768259</a><br />
-        <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a>
-      </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="copy">© <span id="year"></span> Sourav J Prakash — Cyber Security Analyst.</div>
+      <div class="copy">© <span id="year"></span> Your Name — Built with care.</div>
       <div class="social">
-        <a href="https://github.com/" aria-label="GitHub" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/sourav-j-prakash" aria-label="LinkedIn" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="#" aria-label="GitHub">GitHub</a>
+        <a href="#" aria-label="LinkedIn">LinkedIn</a>
       </div>
     </div>
   </footer>
