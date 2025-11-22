@@ -3,158 +3,214 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sourav J Prakash — Cyber Security Analyst</title>
-  <meta name="description" content="Portfolio and resume of Sourav J Prakash — Cyber Security Analyst." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <title>Sourav J Prakash — Portfolio</title>
+  <meta name="description" content="Sourav J Prakash — Cyber Security Analyst" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header" role="banner">
+  <!-- Canvas background -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="#home">Sourav J Prakash</a>
-      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-      <nav id="nav" class="nav" role="navigation" aria-label="Main navigation">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
+      <div class="brand">
+        <a href="#hero">Sourav J Prakash</a>
+      </div>
+
+      <nav class="nav" id="nav">
+        <a href="#hero">Home</a>
         <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
         <a href="#contact">Contact</a>
+        <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">🌓</button>
       </nav>
+
+      <button id="nav-toggle" class="nav-toggle" aria-label="Open navigation">☰</button>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
-    <section id="home" class="hero">
-      <div class="container hero-inner">
-        <div class="hero-text">
-          <h1>Hello — I'm Sourav J Prakash</h1>
-          <p class="muted">CYBER SECURITY ANALYST</p>
-          <p class="hero-role">I am <span id="typed" aria-live="polite"></span></p>
-          <div class="hero-ctas">
-            <a class="btn" href="#contact">Contact Me</a>
-            <a class="btn btn-outline" href="assets/SouravJPrakash_CV.pdf" target="_blank" rel="noopener">Download CV</a>
-          </div>
+    <section id="hero" class="hero container section-anim">
+      <div class="hero-left">
+        <h1 class="reveal">Hi, I'm <span class="accent">Sourav J Prakash</span></h1>
+        <p class="lead reveal delay-1">
+          I am a passionate Cyber Security Analyst & aspirant with a Bachelor's degree in Computer Applications (BCA).
+          I have a solid foundation in web development, ethical hacking and threat analysis. I focus on identifying vulnerabilities,
+          implementing security controls and improving organizational security posture.
+        </p>
+        <div class="hero-ctas reveal delay-2">
+          <a class="btn" href="#projects">View projects</a>
+          <a class="btn btn-outline" href="resume.pdf" download>Download resume</a>
         </div>
 
-        <aside class="hero-card" aria-labelledby="contact-heading">
-          <div class="card-inner">
-            <h3 id="contact-heading">Contact</h3>
-            <p>Kottayam • +91 9946768259</p>
-            <p><a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></p>
-            <p><a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a></p>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ABOUT / PROFILE -->
-    <section id="about" class="about reveal">
-      <div class="container">
-        <h2>Profile</h2>
-        <p>I am a passionate Cyber Security Analyst & aspirant with a Bachelor’s degree in Computer Applications (BCA) and a strong foundation in web development, ethical hacking, and threat analysis. Skilled in identifying vulnerabilities and implementing security measures, I aim to enhance organizational security and ensure data integrity while growing as a cybersecurity professional.</p>
-
-        <div class="two-col">
-          <div>
-            <div class="two-col">
-  <div>
-    <h3>Education</h3>
-    <p><strong>Bachelor of Computer Applications</strong><br>CMS College Kottayam (2021 - 2024)</p>
-    <p><strong>Currently pursuing</strong> Master of Computer Applications (MCA) — Lead College (2025 - Present)</p>
-    <p><strong>Offenso Certified Security Analyst (OCSA)</strong><br>Security Analyst - Version 3.0 (NCVET/MSDE)</p>
-  </div>
-
-          <div>
-            <h3>Skills & Tools</h3>
-            <ul class="skills-list">
-              <li>Languages: C, C++, Java, Python, MySQL</li>
-              <li>Tools: Nmap, Wireshark, Metasploit, Burpsuite, JohnTheRipper, Hydra, Gobuster, Binwalk</li>
-              <li>Areas: Vulnerability Assessment, Penetration Testing, Threat Analysis, Security Protocols</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="projects reveal">
-      <div class="container">
-        <h2>Projects</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Petvet</h3>
-            <p>Online veterinary clinic and pet care booking website.</p>
-            <p><a href="#" onclick="alert('petvet.zip')">View</a></p>
-          </article>
-
-          <article class="card">
-            <h3>Walkwell</h3>
-            <p>Footwear e-commerce website (UI + checkout flow).</p>
-            <p><a href="#" onclick="alert('Add live/demo link for Walkwell')">View</a></p>
-          </article>
-
-          <article class="card">
-            <h3>Marvel CTF</h3>
-            <p>CTF challenges and hardware hacking labs run at Offenso Hackers Academy.</p>
-            <p><a href="#" onclick="alert('Add CTF writeups or repo link')">View</a></p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- EXPERIENCE -->
-    <section id="experience" class="experience reveal">
-      <div class="container">
-        <h2>Experience</h2>
-
-        <div class="timeline">
-          <div class="timeline-item">
-            <h4>Cyber Security Analyst — Offenso Hackers Academy</h4>
-            <span class="date">JUN '24 - JAN '25</span>
-            <p>Conducted hands-on labs and real-world cybersecurity simulations, performed vulnerability assessments, penetration testing and security auditing. Implemented security controls and continuously monitored emerging threats and best practices.</p>
-          </div>
-        </div>
-
-        <h3>Achievements & Volunteering</h3>
-        <ul>
-          <li>“Marvel CTF” by Offenso Hackers Academy</li>
-          <li>Hardware Hacking workshops</li>
-          <li>Volunteer — Na‑Node (Hardware Village) & Kerala Cyber Suraksha Bhadratha Mission (KCBM)</li>
+        <ul style="margin-top:1rem; color:var(--muted); line-height:1.6;">
+          <li><strong>Role:</strong> Cyber Security Analyst</li>
+          <li><strong>Location:</strong> Kottayam, India</li>
+          <li><strong>Email:</strong> <a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></li>
+          <li><strong>Phone:</strong> <a href="tel:+919946768259">+91 9946768259</a></li>
+          <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a></li>
         </ul>
       </div>
+
+      <div class="hero-right reveal delay-3" aria-hidden="true">
+        <div class="card-glass avatar">SJ</div>
+      </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="contact reveal">
-      <div class="container">
-        <h2>Contact</h2>
-        <p>If you'd like to connect, email me or use the contact form below.</p>
+    <section id="projects" class="section container section-anim">
+      <h2 class="section-title reveal">Selected Projects</h2>
+      <p class="section-sub reveal delay-1">A few highlights from my portfolio and cybersecurity work.</p>
 
-        <form class="contact-form" onsubmit="event.preventDefault(); handleContactSubmit();">
-          <label>
-            <span>Name</span>
-            <input type="text" name="name" required>
-          </label>
+      <div class="grid projects-grid">
+        <article class="card reveal delay-2">
+          <h3>Petvet</h3>
+          <p class="muted">An online veterinary clinic and pet care booking website — implemented booking flows and admin features for managing appointments and pet profiles.</p>
+          <p class="tags">Web · Booking · UX</p>
+          <div class="card-actions">
+            <a href="#" class="btn-link" aria-disabled="true">Live</a>
+            <a href="#" class="btn-link" aria-disabled="true">Code</a>
+          </div>
+        </article>
 
-          <label>
-            <span>Email</span>
-            <input type="email" name="email" required>
-          </label>
+        <article class="card reveal delay-3">
+          <h3>Walkwell</h3>
+          <p class="muted">An online footwear e-commerce site (frontend + basic store backend). Focused on product listing, cart flows and mobile-first responsive UI.</p>
+          <p class="tags">Web · E‑commerce</p>
+          <div class="card-actions">
+            <a href="#" class="btn-link" aria-disabled="true">Live</a>
+            <a href="#" class="btn-link" aria-disabled="true">Code</a>
+          </div>
+        </article>
 
-          <label>
-            <span>Message</span>
-            <textarea name="message" rows="5" required></textarea>
-          </label>
+        <article class="card reveal delay-4">
+          <h3>Na-Node (Hardware Village)</h3>
+          <p class="muted">Hardware hacking & security exploration for embedded devices — part of community events and hands-on sessions.</p>
+          <p class="tags">Hardware · Hacking · CTFs</p>
+        </article>
+      </div>
+    </section>
 
-          <button class="btn" type="submit">Send</button>
-        </form>
+    <section id="skills" class="section container section-anim">
+      <h2 class="section-title reveal">Skills</h2>
+
+      <div class="skills-grid">
+        <div class="skill-item reveal delay-1">
+          <div class="skill-head">
+            <strong>Python</strong>
+            <span class="muted percent">85%</span>
+          </div>
+          <div class="skill-bar" data-percent="85"><span></span></div>
+        </div>
+
+        <div class="skill-item reveal delay-2">
+          <div class="skill-head">
+            <strong>C</strong>
+            <span class="muted percent">75%</span>
+          </div>
+          <div class="skill-bar" data-percent="75"><span></span></div>
+        </div>
+
+        <div class="skill-item reveal delay-3">
+          <div class="skill-head">
+            <strong>C++</strong>
+            <span class="muted percent">70%</span>
+          </div>
+          <div class="skill-bar" data-percent="70"><span></span></div>
+        </div>
+
+        <div class="skill-item reveal delay-4">
+          <div class="skill-head">
+            <strong>Java</strong>
+            <span class="muted percent">70%</span>
+          </div>
+          <div class="skill-bar" data-percent="70"><span></span></div>
+        </div>
+
+        <div class="skill-item reveal delay-5">
+          <div class="skill-head">
+            <strong>MySQL</strong>
+            <span class="muted percent">65%</span>
+          </div>
+          <div class="skill-bar" data-percent="65"><span></span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem" class="reveal delay-6">
+        <h3 style="margin-bottom:0.4rem">Cybersecurity tools</h3>
+        <p class="muted">Nmap · netdiscovery · JohnTheRipper · Hydra · Medusa · Binwalk · Wireshark · Metasploit · ExploitDB · Burpsuite · Gobuster</p>
+      </div>
+    </section>
+
+    <section id="about" class="section container section-anim">
+      <h2 class="section-title reveal">About & Education</h2>
+      <div class="about-grid">
+        <div class="reveal delay-1">
+          <p>
+            I aim to identify and remediate vulnerabilities, improve security controls and ensure data integrity.
+            I have hands-on experience from labs, CTFs and community projects, and I continually research emerging threats and defensive techniques.
+          </p>
+
+          <h3 style="margin-top:0.75rem">Certifications</h3>
+          <ul class="facts">
+            <li>Offenso Certified Security Analyst (OCSA) — Security Analyst v3.0 (NCVET / MSDE)</li>
+          </ul>
+        </div>
+
+        <div class="reveal delay-2">
+          <h3>Education</h3>
+          <ul class="facts">
+            <li>Bachelor of Computer Applications (BCA), 2021–2024 — CMS College, Kottayam</li>
+          </ul>
+
+          <h3 style="margin-top:0.6rem">Languages</h3>
+          <p class="muted">English · Malayalam · Tamil</p>
+
+          <h3 style="margin-top:0.6rem">Soft skills</h3>
+          <p class="muted">Teamwork · Leadership · Coordination · Delegation · Multitasking · Decisiveness</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section container section-anim">
+      <h2 class="section-title reveal">Contact</h2>
+      <p class="reveal delay-1">Interested in working together or discussing a security challenge? Reach out.</p>
+
+      <form id="contact-form" class="contact-form reveal delay-2" action="https://formspree.io/f/your-id" method="POST">
+        <label>
+          <span class="label-text">Name</span>
+          <input name="name" type="text" required />
+        </label>
+
+        <label>
+          <span class="label-text">Email</span>
+          <input name="email" type="email" required value="souravjprakashsourav@gmail.com" />
+        </label>
+
+        <label>
+          <span class="label-text">Message</span>
+          <textarea name="message" rows="5" required></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">Send message</button>
+        </div>
+      </form>
+
+      <div style="margin-top:1.25rem" class="reveal delay-3">
+        <strong>Phone:</strong> <a href="tel:+919946768259">+91 9946768259</a><br />
+        <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="container">
-      <p>© <span id="year"></span> Sourav J Prakash — Cyber Security Analyst</p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="copy">© <span id="year"></span> Sourav J Prakash — Cyber Security Analyst.</div>
+      <div class="social">
+        <a href="https://github.com/" aria-label="GitHub" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/sourav-j-prakash" aria-label="LinkedIn" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
     </div>
   </footer>
 
