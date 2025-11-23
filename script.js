@@ -1,4 +1,4 @@
-// Vertical-flow node-network background (blue theme) — brighter & faster
+// Vertical-flow node-network background (blue theme) — increased brightness & glow
 // Particles move upward, wrap to bottom, and draw brighter glowing connection lines.
 // Respects prefers-reduced-motion. Exposes window.__bgVerticalNetwork for tweaking.
 (() => {
@@ -29,16 +29,17 @@
     let rafId = null;
 
     const cfg = {
-      particleDensity: 1 / 70,   // more particles (increase visibility)
-      minR: 1.8,
-      maxR: 5.2,
-      vxRange: 0.32,
-      vyMin: -1.6,               // faster upward motion (more negative)
-      vyMax: -0.45,
-      connectDist: 170,         // longer connecting lines
-      lineWidth: 1.1,
-      color: { r: 61, g: 168, b: 255 }, // cyan-blue
-      softBlobAlpha: 0.08
+      particleDensity: 1 / 60,   // increased density for brightness
+      minR: 2.0,
+      maxR: 6.0,
+      vxRange: 0.36,
+      vyMin: -2.0,               // faster upward motion
+      vyMax: -0.6,
+      connectDist: 180,         // longer connecting lines
+      lineWidth: 1.4,
+      color: { r: 120, g: 210, b: 255 }, // brighter cyan-blue
+      softBlobAlpha: 0.12,      // brighter soft blobs
+      particleAlphaBoost: 1.6   // multiplier to increase particle alpha visibility
     };
 
     function rand(min, max) { return Math.random() * (max - min) + min; }
@@ -58,7 +59,7 @@
 
     function initParticles() {
       particles = [];
-      const count = Math.max(18, Math.round(W * cfg.particleDensity));
+      const count = Math.max(20, Math.round(W * cfg.particleDensity));
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * W,
@@ -66,7 +67,7 @@
           r: rand(cfg.minR, cfg.maxR),
           vx: (Math.random() - 0.5) * cfg.vxRange,
           vy: rand(cfg.vyMin, cfg.vyMax),
-          a: 0.06 + Math.random() * 0.18
+          a: Math.min(0.9, (0.06 + Math.random() * 0.36) * cfg.particleAlphaBoost)
         });
       }
     }
@@ -81,13 +82,13 @@
 
     function drawSoftBlobs(t) {
       const tt = t * 0.00014;
-      const b1 = { x: W * 0.16 + Math.sin(tt) * W * 0.025, y: H * 0.25, r: Math.min(W, H) * 0.32, a: cfg.softBlobAlpha };
-      const b2 = { x: W * 0.78 + Math.cos(tt * 1.05) * W * 0.035, y: H * 0.7, r: Math.min(W, H) * 0.24, a: cfg.softBlobAlpha * 0.9 };
+      const b1 = { x: W * 0.16 + Math.sin(tt) * W * 0.03, y: H * 0.25, r: Math.min(W, H) * 0.34, a: cfg.softBlobAlpha };
+      const b2 = { x: W * 0.78 + Math.cos(tt * 1.05) * W * 0.04, y: H * 0.7, r: Math.min(W, H) * 0.26, a: cfg.softBlobAlpha * 0.95 };
 
       [b1, b2].forEach(b => {
         const grad = ctx.createRadialGradient(b.x, b.y, Math.max(2, b.r * 0.02), b.x, b.y, b.r);
         grad.addColorStop(0, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a})`);
-        grad.addColorStop(0.5, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a * 0.5})`);
+        grad.addColorStop(0.5, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a * 0.6})`);
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.globalCompositeOperation = 'screen';
         ctx.fillStyle = grad;
@@ -99,18 +100,27 @@
     }
 
     function drawParticles() {
+      // give particles a subtle glow via shadowBlur
+      ctx.save();
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},0.55)`;
       for (let p of particles) {
         ctx.beginPath();
         ctx.fillStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${p.a})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
+      ctx.restore();
     }
 
     function drawConnections() {
       const maxD2 = cfg.connectDist * cfg.connectDist;
       ctx.lineWidth = cfg.lineWidth;
-      ctx.globalCompositeOperation = 'lighter'; // glow effect
+      // glow effect using shadow, draw brighter lines
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.shadowBlur = 14;
+      ctx.shadowColor = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},0.7)`;
       for (let i = 0; i < particles.length; i++) {
         const a = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
@@ -120,7 +130,7 @@
           const d2 = dx * dx + dy * dy;
           if (d2 <= maxD2) {
             const t = 1 - (d2 / maxD2);
-            const alpha = Math.min(0.95, 0.02 + t * 0.45) * ((a.a + b.a) * 0.9);
+            const alpha = Math.min(1.0, 0.04 + t * 0.6) * ((a.a + b.a) * 0.75);
             ctx.strokeStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${alpha})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -129,24 +139,25 @@
           }
         }
       }
-      ctx.globalCompositeOperation = 'source-over';
+      ctx.restore();
+      // restore composite handled by ctx.restore()
     }
 
     function updateParticles() {
       for (let p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-        // wander
-        p.vx += (Math.random() - 0.5) * 0.02;
-        p.vy += (Math.random() - 0.5) * 0.01;
+        // stronger wander because particles are brighter
+        p.vx += (Math.random() - 0.5) * 0.03;
+        p.vy += (Math.random() - 0.5) * 0.015;
         // wrap top -> bottom for vertical flow
-        if (p.y < -60) {
-          p.y = H + rand(10, 160);
+        if (p.y < -80) {
+          p.y = H + rand(10, 260);
           p.x = Math.random() * W;
           p.vy = rand(cfg.vyMin, cfg.vyMax);
         }
-        if (p.x < -40) p.x = W + 40;
-        if (p.x > W + 40) p.x = -40;
+        if (p.x < -60) p.x = W + 60;
+        if (p.x > W + 60) p.x = -60;
       }
     }
 
@@ -211,14 +222,12 @@
     navLinks.forEach(a => {
       a.addEventListener('click', (e) => {
         const href = a.getAttribute('href');
-        const id = href && href.replace('#', '');
         const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           const data = a.getAttribute('data-nav');
           setActiveNav(data);
-          // close mobile nav if open
           if (nav.classList.contains('open')) {
             nav.classList.remove('open');
             navToggle.setAttribute('aria-expanded', 'false');
@@ -234,8 +243,7 @@
         entries.forEach(en => {
           if (en.isIntersecting) {
             const id = en.target.id;
-            // map section id -> nav data-nav value
-            const mapping = { hero: 'home', about: 'about', languages: 'skills', projects: 'projects', achievements: 'achievements', contact: 'contact' };
+            const mapping = { hero: 'home', about: 'about', languages: 'skills', projects: 'projects', achievements: 'achievements', download: 'cv', contact: 'contact' };
             const name = mapping[id] || '';
             setActiveNav(name);
           }
