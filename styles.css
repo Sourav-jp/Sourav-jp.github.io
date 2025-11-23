@@ -96,10 +96,10 @@ body{
 .btn-primary{
   background: linear-gradient(180deg, #7fd4ff, var(--accent-2));
   color:#002230;
-  box-shadow: 0 8px 30px rgba(56,192,255,0.16), 0 2px 8px rgba(124,92,255,0.06);
+  box-shadow: 0 8px 30px rgba(56,192,255,0.18), 0 2px 8px rgba(124,92,255,0.06);
   transition: transform .12s ease, box-shadow .12s ease;
 }
-.btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 14px 40px rgba(56,192,255,0.22); }
+.btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 14px 40px rgba(56,192,255,0.26); }
 .btn-ghost{background:transparent;border:2px solid rgba(255,255,255,0.06);color:var(--text-light)}
 
 /* portrait arch */
@@ -130,11 +130,17 @@ body{
 
 /* language badges / skills */
 .lang-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem}
-.lang-badge{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));border-radius:12px;padding:0.9rem;display:flex;align-items:center;gap:0.8rem;border-left:6px solid rgba(63,170,255,0.08)}
+.lang-badge{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));border-radius:12px;padding:0.9rem;display:flex;align-items:center;gap:0.8rem;border-left:6px solid rgba(63,170,255,0.12)}
 .lang-img{width:56px;height:56px;object-fit:contain;border-radius:8px;background:transparent}
 .lang-name{font-weight:700;color:var(--text-light);font-family:Inter,system-ui}
 
-/* download CV */
+/* tool badges: same style as language badges (grid) */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1rem}
+.tool-badge{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));border-radius:12px;padding:0.9rem;display:flex;align-items:center;gap:0.8rem;border-left:6px solid rgba(63,170,255,0.12)}
+.tool-img{width:56px;height:56px;object-fit:contain;border-radius:8px;background:transparent}
+.tool-name{font-weight:700;color:var(--text-light);font-family:Inter,system-ui}
+
+/* download CV (not used as a section now in this revision but keep styles for hero) */
 .download-card{display:flex;flex-direction:column;gap:0.8rem;align-items:flex-start}
 .download-actions{display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center}
 .small-note{font-size:0.9rem;color:var(--muted);margin-top:0.5rem}
@@ -168,6 +174,7 @@ body{
   .hero-inner{flex-direction:column-reverse;gap:2.2rem}
   .hero-arch{width:320px;height:430px}
   .lang-grid{grid-template-columns:repeat(2,1fr)}
+  .tool-grid{grid-template-columns:repeat(2,1fr)}
   .nav{display:none}
   .nav-toggle{display:inline-block}
 }
