@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sourav J Prakash — Cyber Security Portfolio</title>
+  <title>Your Name — Cyber Security Portfolio</title>
   <meta name="description" content="Portfolio — Cyber Security & Ethical Hacking" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
@@ -15,7 +15,7 @@
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
   <header class="site-header container" role="banner">
-    <div class="brand"><a href="#hero">Sourav J Prakash</a></div>
+    <div class="brand"><a href="#hero">Your Name</a></div>
 
     <nav class="nav" id="nav" aria-label="Primary navigation">
       <a href="#hero" data-nav="home">Home</a>
@@ -23,6 +23,7 @@
       <a href="#languages" data-nav="skills">Technical Skills</a>
       <a href="#projects" data-nav="projects">Projects</a>
       <a href="#achievements" data-nav="achievements">Achievements</a>
+      <a href="#download" data-nav="cv">CV</a>
       <a href="#contact" data-nav="contact">Contact</a>
       <a class="btn-outline" href="resume.pdf" target="_blank" rel="noopener">Resume</a>
     </nav>
@@ -39,7 +40,8 @@
           <p class="hero-role">Ethical Hacker · Cyber Security Enthusiast</p>
           <p class="hero-sub">Hands-on security analyst specialising in web and embedded systems. I focus on vulnerability discovery, secure design, and practical remediation advice for teams delivering production services.</p>
           <div class="hero-ctas">
-            <a class="btn" href="#projects">View Projects</a>
+            <!-- PRIMARY CTA changed to Download CV (links to download section) -->
+            <a class="btn btn-primary" href="#download">Download CV</a>
             <a class="btn btn-ghost" href="#contact">Contact</a>
           </div>
         </div>
@@ -71,7 +73,7 @@
     <!-- TECHNICAL SKILLS (languages + tools) -->
     <section id="languages" class="section container">
       <h2 class="section-title reveal">Technical Skills</h2>
-      <p class="section-sub reveal">Programming languages and cybersecurity tools.</p>
+      <p class="section-sub reveal">Programming languages and cybersecurity tools I use — click icons for details.</p>
 
       <div class="card card-grid reveal">
         <div class="lang-grid">
@@ -134,6 +136,21 @@
               <div class="tool-name">Gobuster</div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><span></span></div>
+
+    <!-- CV / DOWNLOAD -->
+    <section id="download" class="section container reveal">
+      <div class="card download-card">
+        <h2 class="section-title">Download CV</h2>
+        <p class="section-sub">Download a printable PDF of my CV or open it in a new tab.</p>
+        <div class="download-actions">
+          <a class="btn download-btn" href="resume.pdf" download="YourName_CV.pdf" title="Download CV (PDF)">Download CV (PDF)</a>
+          <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener" title="Open CV in new tab">View CV</a>
+          <p class="muted small-note">File size: ~120KB (PDF). Replace resume.pdf with your latest CV.</p>
         </div>
       </div>
     </section>
@@ -214,7 +231,6 @@
     <div class="footer-inner">
       <div class="copy">© <span id="year"></span> Your Name</div>
       <div class="social">
-        <!-- Replace href="#" with your profile URLs -->
         <a href="https://github.com/your-username" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path fill="#e6f9ff" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.3-1.3-1.6-1.3-1.6-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1 .1.7.6.7.6.9 1.6 2.5 1.1 3 .8.1-.7.4-1.1.7-1.3-2.7-.3-5.6-1.3-5.6-5.9 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 3 .1 3.3.8.8 1.3 1.8 1.3 3.1 0 4.7-2.9 5.6-5.6 5.9.4.3.8 1 .8 2v3c0 .3.2.6.8.5A12 12 0 0 0 12 .5z"/></svg>
         </a>
@@ -233,3 +249,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
