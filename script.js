@@ -1,206 +1,131 @@
-// Enhanced background with soft blobs + drifting particles + network connections
-// Inspired by Amr Kahaleed style + node-line network effect
+// Vertical-flow node-network background (blue theme)
+// Particles move upward, wrap to bottom, and draw glowing connection lines.
+// Respects prefers-reduced-motion and scales for devicePixelRatio.
 (() => {
-  // DOM ready helper
-  function ready(fn) {
-    if (document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
-  }
-
-  ready(() => {
+  document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas && canvas.getContext ? canvas.getContext('2d', { alpha: true }) : null;
-    if (!canvas || !ctx) {
-      console.warn('bg-canvas or 2D context not available.');
+    if (!canvas) {
+      console.error('bg: #bg-canvas missing');
       return;
     }
 
-    // respect prefers-reduced-motion
-    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // ensure canvas visible behind content
+    canvas.style.position = 'fixed';
+    canvas.style.inset = '0';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '0';
 
-    let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
-    let blobs = [], particles = [], strips = [], noiseCanvas = null, scanlineCanvas = null;
-    let last = performance.now();
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    if (!ctx) {
+      console.error('bg: 2D context unavailable');
+      return;
+    }
 
-    const config = {
-      blobCountFactor: 1 / 700,
-      particleDensity: 1 / 90,
-      stripCountFactor: 1 / 700,
-      colors: [
-        'rgba(31,174,138,', // main green-ish
-        'rgba(86,196,168,',
-        'rgba(150,225,205,'
-      ],
-      blobAlpha: 0.08,
-      particleAlphaRange: [0.02, 0.12],
-      particleRadiusRange: [3, 18],
-      fpsLimit: 60,
-      connectDistance: 140,        // max px between nodes to draw a line
-      connectLineWidth: 0.85,
-      connectColor: '31,174,138'  // r,g,b used to build rgba
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) console.info('bg: prefers-reduced-motion enabled — rendering single frame');
+
+    let W = 0, H = 0, DPR = Math.max(1, window.devicePixelRatio || 1);
+    let particles = [];
+    let rafId = null;
+    let lastTime = performance.now();
+
+    const cfg = {
+      particleDensity: 1 / 90,   // particles per px of width
+      minR: 1.6,
+      maxR: 4.8,
+      vxRange: 0.24,
+      vyMin: -0.95,              // upward speed min (more negative -> faster)
+      vyMax: -0.25,              // upward speed max
+      connectDist: 150,
+      lineWidth: 0.9,
+      color: { r: 61, g: 168, b: 255 }, // cyan-blue
+      softBlobAlpha: 0.06
     };
 
     function rand(min, max) { return Math.random() * (max - min) + min; }
-    function choose(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-    function createNoiseCanvas(w, h) {
-      const c = document.createElement('canvas');
-      c.width = Math.max(1, Math.floor(w / 2));
-      c.height = Math.max(1, Math.floor(h / 2));
-      const g = c.getContext('2d');
-      const img = g.createImageData(c.width, c.height);
-      for (let i = 0; i < img.data.length; i += 4) {
-        const v = 180 + Math.floor(Math.random() * 40);
-        img.data[i] = v;
-        img.data[i + 1] = v;
-        img.data[i + 2] = v;
-        img.data[i + 3] = Math.floor(6 + Math.random() * 12);
-      }
-      g.putImageData(img, 0, 0);
-      return c;
+    function resize() {
+      DPR = Math.max(1, window.devicePixelRatio || 1);
+      W = Math.max(320, window.innerWidth);
+      H = Math.max(320, window.innerHeight);
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      initParticles();
+      // render a single static frame if reduced motion
+      if (prefersReduced) render(performance.now());
     }
 
-    function createScanlineCanvas(w) {
-      const c = document.createElement('canvas');
-      c.width = Math.max(1, w);
-      c.height = 3;
-      const g = c.getContext('2d');
-      g.fillStyle = 'rgba(255,255,255,0.02)';
-      g.fillRect(0, 0, w, 1);
-      g.fillStyle = 'rgba(0,0,0,0.02)';
-      g.fillRect(0, 1, w, 2);
-      return c;
-    }
-
-    function initEntities() {
-      blobs = []; particles = []; strips = [];
-
-      const blobCount = Math.max(2, Math.round((W * config.blobCountFactor)));
-      for (let i = 0; i < blobCount; i++) {
-        const baseR = rand(Math.min(W, H) * 0.12, Math.min(W, H) * 0.36);
-        blobs.push({
-          x: rand(-W * 0.2, W * 1.2),
-          y: rand(-H * 0.2, H * 1.2),
-          baseR,
-          r: baseR,
-          phase: Math.random() * Math.PI * 2,
-          speed: rand(0.0006, 0.002),
-          color: choose(config.colors)
-        });
-      }
-
-      const particleCount = Math.max(10, Math.round(W * config.particleDensity));
-      for (let i = 0; i < particleCount; i++) {
+    function initParticles() {
+      particles = [];
+      const count = Math.max(12, Math.round(W * cfg.particleDensity));
+      for (let i = 0; i < count; i++) {
         particles.push({
-          x: rand(0, W),
-          y: rand(0, H),
-          r: rand(config.particleRadiusRange[0], config.particleRadiusRange[1]),
-          alpha: rand(config.particleAlphaRange[0], config.particleAlphaRange[1]),
-          vx: rand(-0.08, 0.08),
-          vy: rand(-0.2, -0.02),
-          wobble: Math.random() * 1000
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: rand(cfg.minR, cfg.maxR),
+          vx: (Math.random() - 0.5) * cfg.vxRange,
+          vy: rand(cfg.vyMin, cfg.vyMax),
+          a: 0.04 + Math.random() * 0.18
         });
       }
-
-      const stripCount = Math.max(3, Math.round(W * config.stripCountFactor));
-      for (let i = 0; i < stripCount; i++) {
-        strips.push({
-          x: rand(-W * 0.5, W * 1.5),
-          y: rand(0, H),
-          w: rand(160, 420),
-          a: rand(-0.18, -0.06),
-          speed: rand(0.02, 0.12),
-          alpha: rand(0.02, 0.08)
-        });
-      }
-
-      noiseCanvas = createNoiseCanvas(W, H);
-      scanlineCanvas = createScanlineCanvas(W);
     }
 
-    function drawBlobs(now) {
-      for (const b of blobs) {
-        b.phase += b.speed;
-        b.r = b.baseR + Math.sin(b.phase) * (b.baseR * 0.06);
-        const grad = ctx.createRadialGradient(b.x, b.y, Math.max(2, b.r * 0.05), b.x, b.y, b.r);
-        grad.addColorStop(0, b.color + (config.blobAlpha * 2) + ')');
-        grad.addColorStop(0.45, b.color + (config.blobAlpha) + ')');
-        grad.addColorStop(1, b.color + '0)');
+    function clearBackground() {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#021322');
+      g.addColorStop(1, '#031d2b');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawSoftBlobs(t) {
+      // 2 soft radial blobs for depth
+      const tt = t * 0.00012;
+      const b1 = { x: W * 0.18 + Math.sin(tt) * W * 0.02, y: H * 0.24, r: Math.min(W, H) * 0.3, a: cfg.softBlobAlpha };
+      const b2 = { x: W * 0.78 + Math.cos(tt * 1.1) * W * 0.03, y: H * 0.72, r: Math.min(W, H) * 0.22, a: cfg.softBlobAlpha * 0.8 };
+
+      [b1, b2].forEach(b => {
+        const grad = ctx.createRadialGradient(b.x, b.y, Math.max(2, b.r * 0.02), b.x, b.y, b.r);
+        grad.addColorStop(0, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a})`);
+        grad.addColorStop(0.5, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a * 0.5})`);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.globalCompositeOperation = 'screen';
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalCompositeOperation = 'source-over';
-        // subtle drift
-        b.x += Math.sin(now / 7000 + b.phase) * 0.04;
-        b.y += Math.cos(now / 9000 + b.phase) * 0.02;
-      }
+      });
     }
 
-    function drawStrips(now) {
-      ctx.save();
-      ctx.globalCompositeOperation = 'overlay';
-      for (const s of strips) {
-        ctx.save();
-        ctx.translate(s.x, s.y);
-        ctx.rotate(s.a);
-        const grad = ctx.createLinearGradient(0, 0, s.w, 0);
-        grad.addColorStop(0, 'rgba(255,255,255,0)');
-        grad.addColorStop(0.45, `rgba(31,174,138,${s.alpha * 0.4})`);
-        grad.addColorStop(0.7, `rgba(86,196,168,${s.alpha * 0.25})`);
-        grad.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, -H, s.w, H * 3);
-        ctx.restore();
-        s.x -= s.speed;
-        if (s.x + s.w < -W) s.x = W + Math.random() * W;
-      }
-      ctx.restore();
-    }
-
-    function drawParticles(now) {
-      for (const p of particles) {
+    function drawParticles() {
+      for (let p of particles) {
         ctx.beginPath();
-        ctx.fillStyle = `rgba(31,174,138,${p.alpha})`;
+        ctx.fillStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${p.a})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-        // motion
-        p.x += Math.cos(now / 1000 + p.wobble) * 0.02 + p.vx;
-        p.y += p.vy;
-        p.wobble += 0.01;
-        // reset when out of bounds
-        if (p.y + p.r < -40 || p.x < -60 || p.x > W + 60) {
-          p.x = rand(0, W);
-          p.y = H + rand(10, 160);
-          p.alpha = rand(config.particleAlphaRange[0], config.particleAlphaRange[1]);
-          p.r = rand(config.particleRadiusRange[0], config.particleRadiusRange[1]);
-          p.vx = rand(-0.08, 0.08);
-          p.vy = rand(-0.18, -0.02);
-          p.wobble = Math.random() * 1000;
-        }
       }
     }
 
-    // draw connecting lines between nearby particles
     function drawConnections() {
-      const len = particles.length;
-      const maxDist = config.connectDistance;
-      const maxDist2 = maxDist * maxDist;
-      // simple O(n^2) check — good enough for modest counts
-      ctx.save();
-      ctx.lineWidth = config.connectLineWidth;
-      for (let i = 0; i < len; i++) {
+      const maxD2 = cfg.connectDist * cfg.connectDist;
+      ctx.lineWidth = cfg.lineWidth;
+      // Use lighter composite for glow feel
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < particles.length; i++) {
         const a = particles[i];
-        for (let j = i + 1; j < len; j++) {
+        for (let j = i + 1; j < particles.length; j++) {
           const b = particles[j];
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const d2 = dx * dx + dy * dy;
-          if (d2 <= maxDist2) {
-            const t = 1 - (d2 / maxDist2); // 0..1, stronger when closer
-            const alpha = Math.min(0.85, 0.02 + t * 0.28) * (a.alpha + b.alpha) * 0.9;
-            ctx.strokeStyle = `rgba(${config.connectColor},${alpha})`;
+          if (d2 <= maxD2) {
+            const t = 1 - (d2 / maxD2);
+            const alpha = Math.min(0.85, 0.02 + t * 0.38) * ((a.a + b.a) * 0.8);
+            ctx.strokeStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${alpha})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -208,106 +133,80 @@
           }
         }
       }
-      ctx.restore();
+      ctx.globalCompositeOperation = 'source-over';
     }
 
-    function drawNoiseAndScanlines() {
-      if (noiseCanvas) {
-        ctx.globalAlpha = 0.12;
-        ctx.drawImage(noiseCanvas, 0, 0, W, H);
-        ctx.globalAlpha = 1;
-      }
-      if (scanlineCanvas) {
-        ctx.globalAlpha = 0.06;
-        for (let y = 0; y < H; y += 3) ctx.drawImage(scanlineCanvas, 0, y);
-        ctx.globalAlpha = 1;
+    function updateParticles() {
+      for (let p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        // gentle wander
+        p.vx += (Math.random() - 0.5) * 0.01;
+        p.vy += (Math.random() - 0.5) * 0.006;
+        // wrap top -> bottom to create continuous upward flow
+        if (p.y < -40) {
+          p.y = H + rand(10, 80);
+          p.x = Math.random() * W;
+          p.vy = rand(cfg.vyMin, cfg.vyMax);
+        }
+        // horizontal wrap
+        if (p.x < -30) p.x = W + 30;
+        if (p.x > W + 30) p.x = -30;
       }
     }
 
-    // frame loop with fps limit and optional reduced-motion fallback
-    const minDelta = 1000 / config.fpsLimit;
-    function frame(now) {
-      if (reduced) {
-        // static single frame for reduced motion users
-        renderStatic();
+    function render(t) {
+      clearBackground();
+      drawSoftBlobs(t);
+      drawParticles();
+      drawConnections();
+    }
+
+    function loop(t) {
+      render(t);
+      updateParticles();
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function start() {
+      if (prefersReduced) {
+        render(performance.now());
         return;
       }
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(loop);
+    }
 
-      const delta = now - last;
-      if (delta < minDelta) {
-        requestAnimationFrame(frame);
-        return;
+    function stop() {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
       }
-      last = now;
-
-      // base gradient background
-      const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, '#fbfdfe');
-      grad.addColorStop(1, '#f6fafb');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-
-      drawBlobs(now);
-      drawStrips(now);
-      drawParticles(now);
-      drawConnections();
-      drawNoiseAndScanlines();
-
-      requestAnimationFrame(frame);
     }
 
-    function renderStatic() {
-      // draw a quiet non-animating background for reduced-motion
-      const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, '#fbfdfe');
-      grad.addColorStop(1, '#f6fafb');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
+    // Expose debug handle
+    window.__bgVerticalNetwork = {
+      start,
+      stop,
+      resize,
+      cfg,
+      getParticleCount: () => particles.length
+    };
 
-      // draw one static set of blobs/particles/lines (no animation)
-      drawBlobs(performance.now());
-      drawStrips(performance.now());
-      drawParticles(performance.now());
-      drawConnections();
-      drawNoiseAndScanlines();
-    }
-
-    function resize() {
-      dpr = Math.max(1, window.devicePixelRatio || 1);
-      W = Math.max(320, window.innerWidth);
-      H = Math.max(320, window.innerHeight);
-      canvas.width = Math.floor(W * dpr);
-      canvas.height = Math.floor(H * dpr);
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initEntities();
-      // if reduced motion, render one static frame
-      if (reduced) renderStatic();
-    }
-
-    // initial setup & handlers
+    // Init
     window.addEventListener('resize', () => {
       clearTimeout(window._bgResizeTimeout);
       window._bgResizeTimeout = setTimeout(resize, 120);
     });
 
+    console.info('bg: vertical network init');
     resize();
-    if (!reduced) requestAnimationFrame(frame);
+    start();
 
-    // expose small debug helpers
-    window.__bgAnim = {
-      resize,
-      regenerate: initEntities,
-      config
-    };
-
-    // --------- UI interactions & reveal-on-scroll ----------
-    // set year
+    // --- small UI helpers (nav, anchors, year, reveals, contact) ---
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // mobile nav toggle (use class + aria)
     const navToggle = document.getElementById('nav-toggle');
     const nav = document.getElementById('nav');
     if (navToggle && nav) {
@@ -317,7 +216,6 @@
       });
     }
 
-    // smooth anchors
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', (e) => {
         const href = a.getAttribute('href');
@@ -330,7 +228,6 @@
       });
     });
 
-    // reveal on scroll with IntersectionObserver (staggered)
     const reveals = Array.from(document.querySelectorAll('.reveal'));
     if ('IntersectionObserver' in window) {
       const ro = new IntersectionObserver((entries) => {
@@ -341,34 +238,26 @@
           }
         });
       }, { threshold: 0.12 });
-
       reveals.forEach((el, i) => {
         el.style.transitionDelay = `${Math.min(0.55, i * 0.06)}s`;
         ro.observe(el);
       });
     } else {
-      // fallback: reveal all
       reveals.forEach(el => el.classList.add('in-view'));
     }
 
-    // hero pop
-    const heroPop = document.querySelector('.hero-pop');
-    if (heroPop && !reduced) setTimeout(() => heroPop.classList.add('in-view'), 380);
-    else if (heroPop && reduced) heroPop.classList.add('in-view');
-
-    // contact form demo fallback handler (graceful)
+    // contact form fallback
     const form = document.getElementById('contact-form');
     const statusEl = document.getElementById('contact-status');
     if (form) {
       form.addEventListener('submit', (e) => {
-        if (form.action && form.action.includes('formspree.io')) return; // let real submit go through
+        if (form.action && form.action.includes('formspree.io')) return;
         e.preventDefault();
         if (statusEl) {
           statusEl.textContent = 'Thanks — your message has been received (demo).';
           form.reset();
           setTimeout(() => { statusEl.textContent = ''; }, 3500);
         } else {
-          // fallback alert only if no status element
           alert('Thanks — your message has been received (demo).');
           form.reset();
         }
