@@ -26,6 +26,23 @@ body{
   overflow-x:hidden;
 }
 
+/* skip link */
+.skip-link{
+  position:absolute;
+  left:12px;
+  top:12px;
+  background:#000;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  transform:translateY(-120%);
+  transition:transform .18s ease;
+  z-index:9999;
+  text-decoration:none;
+  font-size:0.9rem;
+}
+.skip-link:focus{transform:translateY(0)}
+
 /* canvas background under content */
 #bg-canvas{position:fixed;inset:0;z-index:0;display:block;pointer-events:none}
 
@@ -38,8 +55,11 @@ body{
 .nav a:hover{background:rgba(0,0,0,0.03)}
 .btn-outline{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:0.4rem 0.8rem;border-radius:999px;color:var(--text-dark)}
 
+/* allow JS-driven open state on small screens */
+.nav.open{display:flex !important}
+
 /* mobile nav */
-.nav-toggle{display:none;background:none;border:0;font-size:1.25rem;color:var(--text-dark)}
+.nav-toggle{display:none;background:none;border:0;font-size:1.25rem;color:var(--text-dark);cursor:pointer}
 
 /* HERO */
 .hero{padding:3rem 0;min-height:72vh;display:flex;align-items:center;justify-content:center}
@@ -114,6 +134,7 @@ body{
 .muted{color:var(--muted)}
 .label-text{display:block;font-size:0.95rem;margin-bottom:0.25rem;color:var(--muted)}
 .contact-form input, .contact-form textarea{width:100%;padding:0.6rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:rgba(255,255,255,0.02);color:var(--text-dark)}
+.contact-status{margin-left:0.9rem;color:#e9fff5;font-weight:700}
 
 /* responsive */
 @media (max-width:1000px){
@@ -122,4 +143,11 @@ body{
   .lang-grid{grid-template-columns:repeat(2,1fr)}
   .nav{display:none}
   .nav-toggle{display:inline-block}
+}
+
+/* prefers reduced motion: reduce animations and render static background (script also respects this) */
+@media (prefers-reduced-motion: reduce){
+  .reveal{transition:none !important;transform:none !important;opacity:1 !important}
+  .hero-pop.in-view .hero-arch{transform:none !important}
+  html,body #bg-canvas{display:block} /* script will render a static frame */
 }
