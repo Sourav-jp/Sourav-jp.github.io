@@ -3,213 +3,238 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sourav J Prakash — Portfolio</title>
-  <meta name="description" content="Sourav J Prakash — Cyber Security Analyst" />
+  <title>Your Name — Cyber Security Portfolio</title>
+  <meta name="description" content="Portfolio — Cyber Security & Ethical Hacking" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Canvas background -->
+  <!-- background canvas -->
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="#hero">Sourav J Prakash</a>
-      </div>
+  <header class="site-header container" role="banner">
+    <div class="brand"><a href="#hero">Your Name</a></div>
 
-      <nav class="nav" id="nav">
-        <a href="#hero">Home</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">🌓</button>
-      </nav>
+    <nav class="nav" id="nav" aria-label="Primary navigation">
+      <a href="#hero">Home</a>
+      <a href="#languages">Technical Skills</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+      <a class="btn-outline" href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
 
-      <button id="nav-toggle" class="nav-toggle" aria-label="Open navigation">☰</button>
-    </div>
+    <button id="nav-toggle" class="nav-toggle" aria-label="Open navigation">☰</button>
   </header>
 
   <main>
-    <section id="hero" class="hero container section-anim">
-      <div class="hero-left">
-        <h1 class="reveal">Hi, I'm <span class="accent">Sourav J Prakash</span></h1>
-        <p class="lead reveal delay-1">
-          I am a passionate Cyber Security Analyst & aspirant with a Bachelor's degree in Computer Applications (BCA).
-          I have a solid foundation in web development, ethical hacking and threat analysis. I focus on identifying vulnerabilities,
-          implementing security controls and improving organizational security posture.
-        </p>
-        <div class="hero-ctas reveal delay-2">
-          <a class="btn" href="#projects">View projects</a>
-          <a class="btn btn-outline" href="resume.pdf" download>Download resume</a>
+    <!-- HERO -->
+    <section id="hero" class="hero container">
+      <div class="hero-inner">
+        <div class="hero-left reveal">
+          <h1 class="hero-title">Hi — I'm <span class="accent">Your Name</span></h1>
+          <p class="hero-sub">Ethical Hacker · Cyber Security Enthusiast</p>
+          <div class="hero-ctas">
+            <a class="btn" href="#projects">View Projects</a>
+            <a class="btn btn-ghost" href="#contact">Contact</a>
+          </div>
         </div>
 
-        <ul style="margin-top:1rem; color:var(--muted); line-height:1.6;">
-          <li><strong>Role:</strong> Cyber Security Analyst</li>
-          <li><strong>Location:</strong> Kottayam, India</li>
-          <li><strong>Email:</strong> <a href="mailto:souravjprakashsourav@gmail.com">souravjprakashsourav@gmail.com</a></li>
-          <li><strong>Phone:</strong> <a href="tel:+919946768259">+91 9946768259</a></li>
-          <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a></li>
+        <div class="hero-right reveal hero-pop" aria-hidden="true">
+          <!-- White arch portrait (replace avatar.jpg in project root) -->
+          <div class="hero-arch">
+            <img src="avatar.jpg" alt="Your portrait" class="avatar-photo" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE SUMMARY -->
+    <section id="profile" class="section container reveal">
+      <div class="card profile-card">
+        <h2 class="section-title">Profile Summary</h2>
+        <p class="mono">
+          I am a hands-on Cyber Security Analyst focused on identifying and remediating vulnerabilities across web and networked systems.
+          My experience covers vulnerability assessment, penetration testing, secure development practices, and incident response.
+          I work with engineering teams to translate findings into prioritized, actionable remediation plans and clear technical reports.
+          I regularly participate in capture-the-flag (CTF) events and community security workshops to keep practical skills sharp.
+          I enjoy mentoring juniors, documenting common weaknesses and building automation to speed secure delivery of software.
+        </p>
+      </div>
+    </section>
+
+    <!-- partition -->
+    <div class="section-divider" aria-hidden="true"><span></span></div>
+
+    <!-- TECHNICAL SKILLS (languages + tools) -->
+    <section id="languages" class="section container">
+      <h2 class="section-title reveal">Technical Skills</h2>
+      <p class="section-sub reveal">Programming languages and cybersecurity tools I use — click icons for details.</p>
+
+      <div class="card card-grid reveal">
+        <div class="lang-grid">
+          <!-- Put your icons in icons/ with these names (svg/png/webp). -->
+          <div class="lang-badge">
+            <img src="icons/js.svg" alt="JavaScript" class="lang-img" width="56" height="56" />
+            <div class="lang-name">JavaScript</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/py.svg" alt="Python" class="lang-img" width="56" height="56" />
+            <div class="lang-name">Python</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/c.svg" alt="C" class="lang-img" width="56" height="56" />
+            <div class="lang-name">C</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/cpp.svg" alt="C++" class="lang-img" width="56" height="56" />
+            <div class="lang-name">C++</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/java.svg" alt="Java" class="lang-img" width="56" height="56" />
+            <div class="lang-name">Java</div>
+          </div>
+
+          <div class="lang-badge">
+            <img src="icons/sql.svg" alt="MySQL" class="lang-img" width="56" height="56" />
+            <div class="lang-name">MySQL</div>
+          </div>
+        </div>
+
+        <div class="tools-grid">
+          <h3 class="tools-title">Cybersecurity Tools</h3>
+          <div class="tools-row">
+            <!-- Put your tool icons in tools/ with these names -->
+            <div class="tool-item">
+              <img src="tools/nmap.svg" alt="Nmap" class="tool-img" width="40" height="40" />
+              <div class="tool-name">Nmap</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/wireshark.svg" alt="Wireshark" class="tool-img" width="40" height="40" />
+              <div class="tool-name">Wireshark</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/metasploit.svg" alt="Metasploit" class="tool-img" width="40" height="40" />
+              <div class="tool-name">Metasploit</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/burpsuite.svg" alt="Burp Suite" class="tool-img" width="40" height="40" />
+              <div class="tool-name">Burp Suite</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/jtr.svg" alt="JohnTheRipper" class="tool-img" width="40" height="40" />
+              <div class="tool-name">JohnTheRipper</div>
+            </div>
+            <div class="tool-item">
+              <img src="tools/gobuster.svg" alt="Gobuster" class="tool-img" width="40" height="40" />
+              <div class="tool-name">Gobuster</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- partition -->
+    <div class="section-divider"><span></span></div>
+
+    <!-- ACHIEVEMENTS -->
+    <section id="achievements" class="section container reveal">
+      <h2 class="section-title">Achievements</h2>
+      <div class="card">
+        <ul class="achievements">
+          <li>Offenso Certified Security Analyst (OCSA).</li>
+          <li>Active participant and medalist in various CTFs and security competitions.</li>
+          <li>Presented hardware security workshops and contributed to Na‑Node community events.</li>
+          <li>Implemented secure authentication, RBAC and secure session handling in production apps.</li>
         </ul>
       </div>
-
-      <div class="hero-right reveal delay-3" aria-hidden="true">
-        <div class="card-glass avatar">SJ</div>
-      </div>
     </section>
 
-    <section id="projects" class="section container section-anim">
-      <h2 class="section-title reveal">Selected Projects</h2>
-      <p class="section-sub reveal delay-1">A few highlights from my portfolio and cybersecurity work.</p>
+    <!-- partition -->
+    <div class="section-divider"><span></span></div>
 
+    <!-- PROJECTS -->
+    <section id="projects" class="section container reveal">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-sub">Selected security and web development projects.</p>
       <div class="grid projects-grid">
-        <article class="card reveal delay-2">
-          <h3>Petvet</h3>
-          <p class="muted">An online veterinary clinic and pet care booking website — implemented booking flows and admin features for managing appointments and pet profiles.</p>
-          <p class="tags">Web · Booking · UX</p>
-          <div class="card-actions">
-            <a href="#" class="btn-link" aria-disabled="true">Live</a>
-            <a href="#" class="btn-link" aria-disabled="true">Code</a>
-          </div>
+        <article class="card reveal">
+          <h3>Petvet — Online booking</h3>
+          <p class="muted">A secure booking system with admin controls, audit logs and role-based access.</p>
         </article>
 
-        <article class="card reveal delay-3">
-          <h3>Walkwell</h3>
-          <p class="muted">An online footwear e-commerce site (frontend + basic store backend). Focused on product listing, cart flows and mobile-first responsive UI.</p>
-          <p class="tags">Web · E‑commerce</p>
-          <div class="card-actions">
-            <a href="#" class="btn-link" aria-disabled="true">Live</a>
-            <a href="#" class="btn-link" aria-disabled="true">Code</a>
-          </div>
+        <article class="card reveal">
+          <h3>Walkwell — E‑commerce</h3>
+          <p class="muted">Mobile-first storefront optimized for secure checkout and order handling.</p>
         </article>
 
-        <article class="card reveal delay-4">
-          <h3>Na-Node (Hardware Village)</h3>
-          <p class="muted">Hardware hacking & security exploration for embedded devices — part of community events and hands-on sessions.</p>
-          <p class="tags">Hardware · Hacking · CTFs</p>
+        <article class="card reveal">
+          <h3>Na‑Node — Hardware hacking</h3>
+          <p class="muted">Embedded device security experiments and community workshop materials.</p>
         </article>
       </div>
     </section>
 
-    <section id="skills" class="section container section-anim">
-      <h2 class="section-title reveal">Skills</h2>
+    <!-- partition -->
+    <div class="section-divider"><span></span></div>
 
-      <div class="skills-grid">
-        <div class="skill-item reveal delay-1">
-          <div class="skill-head">
-            <strong>Python</strong>
-            <span class="muted percent">85%</span>
-          </div>
-          <div class="skill-bar" data-percent="85"><span></span></div>
-        </div>
-
-        <div class="skill-item reveal delay-2">
-          <div class="skill-head">
-            <strong>C</strong>
-            <span class="muted percent">75%</span>
-          </div>
-          <div class="skill-bar" data-percent="75"><span></span></div>
-        </div>
-
-        <div class="skill-item reveal delay-3">
-          <div class="skill-head">
-            <strong>C++</strong>
-            <span class="muted percent">70%</span>
-          </div>
-          <div class="skill-bar" data-percent="70"><span></span></div>
-        </div>
-
-        <div class="skill-item reveal delay-4">
-          <div class="skill-head">
-            <strong>Java</strong>
-            <span class="muted percent">70%</span>
-          </div>
-          <div class="skill-bar" data-percent="70"><span></span></div>
-        </div>
-
-        <div class="skill-item reveal delay-5">
-          <div class="skill-head">
-            <strong>MySQL</strong>
-            <span class="muted percent">65%</span>
-          </div>
-          <div class="skill-bar" data-percent="65"><span></span></div>
-        </div>
-      </div>
-
-      <div style="margin-top:1rem" class="reveal delay-6">
-        <h3 style="margin-bottom:0.4rem">Cybersecurity tools</h3>
-        <p class="muted">Nmap · netdiscovery · JohnTheRipper · Hydra · Medusa · Binwalk · Wireshark · Metasploit · ExploitDB · Burpsuite · Gobuster</p>
+    <!-- EDUCATION -->
+    <section id="education" class="section container reveal">
+      <h2 class="section-title">Education</h2>
+      <div class="card">
+        <ul class="facts">
+          <li>Bachelor of Computer Applications (BCA), CMS College, Kottayam (2021–2024).</li>
+          <li>Currently pursuing MCA at Lead College of Management (ongoing).</li>
+        </ul>
+        <p class="mono muted">Continuing academic focus on secure software design, networking and applied cryptography as part of the MCA programme. Coursework includes secure coding practices, advanced networking and applied cryptography labs.</p>
       </div>
     </section>
 
-    <section id="about" class="section container section-anim">
-      <h2 class="section-title reveal">About & Education</h2>
-      <div class="about-grid">
-        <div class="reveal delay-1">
-          <p>
-            I aim to identify and remediate vulnerabilities, improve security controls and ensure data integrity.
-            I have hands-on experience from labs, CTFs and community projects, and I continually research emerging threats and defensive techniques.
-          </p>
+    <!-- partition -->
+    <div class="section-divider"><span></span></div>
 
-          <h3 style="margin-top:0.75rem">Certifications</h3>
-          <ul class="facts">
-            <li>Offenso Certified Security Analyst (OCSA) — Security Analyst v3.0 (NCVET / MSDE)</li>
-          </ul>
-        </div>
+    <!-- CONTACT -->
+    <section id="contact" class="section container reveal">
+      <h2 class="section-title">Contact</h2>
+      <div class="card">
+        <p class="mono">Interested in collaborating or discussing a security challenge? Reach out via email or the form below.</p>
 
-        <div class="reveal delay-2">
-          <h3>Education</h3>
-          <ul class="facts">
-            <li>Bachelor of Computer Applications (BCA), 2021–2024 — CMS College, Kottayam</li>
-          </ul>
+        <form id="contact-form" class="contact-form" action="https://formspree.io/f/your-id" method="POST">
+          <label>
+            <span class="label-text">Name</span>
+            <input name="name" type="text" required />
+          </label>
 
-          <h3 style="margin-top:0.6rem">Languages</h3>
-          <p class="muted">English · Malayalam · Tamil</p>
+          <label>
+            <span class="label-text">Email</span>
+            <input name="email" type="email" required />
+          </label>
 
-          <h3 style="margin-top:0.6rem">Soft skills</h3>
-          <p class="muted">Teamwork · Leadership · Coordination · Delegation · Multitasking · Decisiveness</p>
-        </div>
-      </div>
-    </section>
+          <label>
+            <span class="label-text">Message</span>
+            <textarea name="message" rows="5" required></textarea>
+          </label>
 
-    <section id="contact" class="section container section-anim">
-      <h2 class="section-title reveal">Contact</h2>
-      <p class="reveal delay-1">Interested in working together or discussing a security challenge? Reach out.</p>
-
-      <form id="contact-form" class="contact-form reveal delay-2" action="https://formspree.io/f/your-id" method="POST">
-        <label>
-          <span class="label-text">Name</span>
-          <input name="name" type="text" required />
-        </label>
-
-        <label>
-          <span class="label-text">Email</span>
-          <input name="email" type="email" required value="souravjprakashsourav@gmail.com" />
-        </label>
-
-        <label>
-          <span class="label-text">Message</span>
-          <textarea name="message" rows="5" required></textarea>
-        </label>
-
-        <div class="form-actions">
-          <button type="submit" class="btn">Send message</button>
-        </div>
-      </form>
-
-      <div style="margin-top:1.25rem" class="reveal delay-3">
-        <strong>Phone:</strong> <a href="tel:+919946768259">+91 9946768259</a><br />
-        <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sourav-j-prakash" target="_blank" rel="noopener">linkedin.com/in/sourav-j-prakash</a>
+          <div class="form-actions">
+            <button type="submit" class="btn">Send message</button>
+          </div>
+        </form>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="copy">© <span id="year"></span> Sourav J Prakash — Cyber Security Analyst.</div>
+  <footer class="site-footer container">
+    <div class="footer-inner">
+      <div class="copy">© <span id="year"></span> Your Name</div>
       <div class="social">
-        <a href="https://github.com/" aria-label="GitHub" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/sourav-j-prakash" aria-label="LinkedIn" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="#" aria-label="GitHub">GitHub</a>
+        <a href="#" aria-label="LinkedIn">LinkedIn</a>
       </div>
     </div>
   </footer>
