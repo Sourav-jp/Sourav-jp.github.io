@@ -1,15 +1,15 @@
-// Vertical-flow node-network background (blue theme)
-// Particles move upward, wrap to bottom, and draw glowing connection lines.
-// Respects prefers-reduced-motion and scales for devicePixelRatio.
+// Vertical-flow node-network background (blue theme) — brighter & faster
+// Particles move upward, wrap to bottom, and draw brighter glowing connection lines.
+// Respects prefers-reduced-motion. Exposes window.__bgVerticalNetwork for tweaking.
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) {
-      console.error('bg: #bg-canvas missing');
+      console.error('bg: canvas not found');
       return;
     }
 
-    // ensure canvas visible behind content
+    // enforce canvas behind content
     canvas.style.position = 'fixed';
     canvas.style.inset = '0';
     canvas.style.pointerEvents = 'none';
@@ -17,29 +17,28 @@
 
     const ctx = canvas.getContext && canvas.getContext('2d');
     if (!ctx) {
-      console.error('bg: 2D context unavailable');
+      console.error('bg: 2D context not available');
       return;
     }
 
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) console.info('bg: prefers-reduced-motion enabled — rendering single frame');
+    if (prefersReduced) console.info('bg: prefers-reduced-motion detected — rendering static snapshot');
 
     let W = 0, H = 0, DPR = Math.max(1, window.devicePixelRatio || 1);
     let particles = [];
     let rafId = null;
-    let lastTime = performance.now();
 
     const cfg = {
-      particleDensity: 1 / 90,   // particles per px of width
-      minR: 1.6,
-      maxR: 4.8,
-      vxRange: 0.24,
-      vyMin: -0.95,              // upward speed min (more negative -> faster)
-      vyMax: -0.25,              // upward speed max
-      connectDist: 150,
-      lineWidth: 0.9,
+      particleDensity: 1 / 70,   // more particles (increase visibility)
+      minR: 1.8,
+      maxR: 5.2,
+      vxRange: 0.32,
+      vyMin: -1.6,               // faster upward motion (more negative)
+      vyMax: -0.45,
+      connectDist: 170,         // longer connecting lines
+      lineWidth: 1.1,
       color: { r: 61, g: 168, b: 255 }, // cyan-blue
-      softBlobAlpha: 0.06
+      softBlobAlpha: 0.08
     };
 
     function rand(min, max) { return Math.random() * (max - min) + min; }
@@ -54,13 +53,12 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       initParticles();
-      // render a single static frame if reduced motion
       if (prefersReduced) render(performance.now());
     }
 
     function initParticles() {
       particles = [];
-      const count = Math.max(12, Math.round(W * cfg.particleDensity));
+      const count = Math.max(18, Math.round(W * cfg.particleDensity));
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * W,
@@ -68,7 +66,7 @@
           r: rand(cfg.minR, cfg.maxR),
           vx: (Math.random() - 0.5) * cfg.vxRange,
           vy: rand(cfg.vyMin, cfg.vyMax),
-          a: 0.04 + Math.random() * 0.18
+          a: 0.06 + Math.random() * 0.18
         });
       }
     }
@@ -82,10 +80,9 @@
     }
 
     function drawSoftBlobs(t) {
-      // 2 soft radial blobs for depth
-      const tt = t * 0.00012;
-      const b1 = { x: W * 0.18 + Math.sin(tt) * W * 0.02, y: H * 0.24, r: Math.min(W, H) * 0.3, a: cfg.softBlobAlpha };
-      const b2 = { x: W * 0.78 + Math.cos(tt * 1.1) * W * 0.03, y: H * 0.72, r: Math.min(W, H) * 0.22, a: cfg.softBlobAlpha * 0.8 };
+      const tt = t * 0.00014;
+      const b1 = { x: W * 0.16 + Math.sin(tt) * W * 0.025, y: H * 0.25, r: Math.min(W, H) * 0.32, a: cfg.softBlobAlpha };
+      const b2 = { x: W * 0.78 + Math.cos(tt * 1.05) * W * 0.035, y: H * 0.7, r: Math.min(W, H) * 0.24, a: cfg.softBlobAlpha * 0.9 };
 
       [b1, b2].forEach(b => {
         const grad = ctx.createRadialGradient(b.x, b.y, Math.max(2, b.r * 0.02), b.x, b.y, b.r);
@@ -113,8 +110,7 @@
     function drawConnections() {
       const maxD2 = cfg.connectDist * cfg.connectDist;
       ctx.lineWidth = cfg.lineWidth;
-      // Use lighter composite for glow feel
-      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalCompositeOperation = 'lighter'; // glow effect
       for (let i = 0; i < particles.length; i++) {
         const a = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
@@ -124,7 +120,7 @@
           const d2 = dx * dx + dy * dy;
           if (d2 <= maxD2) {
             const t = 1 - (d2 / maxD2);
-            const alpha = Math.min(0.85, 0.02 + t * 0.38) * ((a.a + b.a) * 0.8);
+            const alpha = Math.min(0.95, 0.02 + t * 0.45) * ((a.a + b.a) * 0.9);
             ctx.strokeStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${alpha})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -140,18 +136,17 @@
       for (let p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-        // gentle wander
-        p.vx += (Math.random() - 0.5) * 0.01;
-        p.vy += (Math.random() - 0.5) * 0.006;
-        // wrap top -> bottom to create continuous upward flow
-        if (p.y < -40) {
-          p.y = H + rand(10, 80);
+        // wander
+        p.vx += (Math.random() - 0.5) * 0.02;
+        p.vy += (Math.random() - 0.5) * 0.01;
+        // wrap top -> bottom for vertical flow
+        if (p.y < -60) {
+          p.y = H + rand(10, 160);
           p.x = Math.random() * W;
           p.vy = rand(cfg.vyMin, cfg.vyMax);
         }
-        // horizontal wrap
-        if (p.x < -30) p.x = W + 30;
-        if (p.x > W + 30) p.x = -30;
+        if (p.x < -40) p.x = W + 40;
+        if (p.x > W + 40) p.x = -40;
       }
     }
 
@@ -178,35 +173,27 @@
     }
 
     function stop() {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
     }
 
-    // Expose debug handle
-    window.__bgVerticalNetwork = {
-      start,
-      stop,
-      resize,
-      cfg,
-      getParticleCount: () => particles.length
-    };
+    // expose debug handle
+    window.__bgVerticalNetwork = { cfg, start, stop, resize, getParticleCount: () => particles.length };
 
-    // Init
+    // initialize & resize handler
     window.addEventListener('resize', () => {
       clearTimeout(window._bgResizeTimeout);
       window._bgResizeTimeout = setTimeout(resize, 120);
     });
-
-    console.info('bg: vertical network init');
     resize();
     start();
 
-    // --- small UI helpers (nav, anchors, year, reveals, contact) ---
+    // ----------------- UI helpers -----------------
+    // Set year
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+    // Mobile nav toggle
     const navToggle = document.getElementById('nav-toggle');
     const nav = document.getElementById('nav');
     if (navToggle && nav) {
@@ -216,18 +203,48 @@
       });
     }
 
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
+    // Smooth anchors and active nav highlighting
+    const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+    function setActiveNav(name) {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('data-nav') === name));
+    }
+    navLinks.forEach(a => {
       a.addEventListener('click', (e) => {
         const href = a.getAttribute('href');
-        if (!href || href === '#') return;
+        const id = href && href.replace('#', '');
         const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const data = a.getAttribute('data-nav');
+          setActiveNav(data);
+          // close mobile nav if open
+          if (nav.classList.contains('open')) {
+            nav.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+          }
         }
       });
     });
 
+    // Highlight nav on scroll based on section in view (IntersectionObserver)
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            const id = en.target.id;
+            // map section id -> nav data-nav value
+            const mapping = { hero: 'home', about: 'about', languages: 'skills', projects: 'projects', achievements: 'achievements', contact: 'contact' };
+            const name = mapping[id] || '';
+            setActiveNav(name);
+          }
+        });
+      }, { threshold: 0.35 });
+      sections.forEach(s => io.observe(s));
+    }
+
+    // reveal-on-scroll (staggered)
     const reveals = Array.from(document.querySelectorAll('.reveal'));
     if ('IntersectionObserver' in window) {
       const ro = new IntersectionObserver((entries) => {
@@ -246,12 +263,12 @@
       reveals.forEach(el => el.classList.add('in-view'));
     }
 
-    // contact form fallback
+    // Contact form fallback
     const form = document.getElementById('contact-form');
     const statusEl = document.getElementById('contact-status');
     if (form) {
       form.addEventListener('submit', (e) => {
-        if (form.action && form.action.includes('formspree.io')) return;
+        if (form.action && form.action.includes('formspree.io')) return; // allow real submit
         e.preventDefault();
         if (statusEl) {
           statusEl.textContent = 'Thanks — your message has been received (demo).';
