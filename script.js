@@ -1,7 +1,5 @@
-// script.js - Amr Kahaleed inspired soft background:
-// soft radial blobs, drifting particles, subtle grain + scanlines,
-// plus UI interactions and reveal-on-scroll for the sections.
-
+// Enhanced background with soft blobs + drifting particles + network connections
+// Inspired by Amr Kahaleed style + node-line network effect
 (() => {
   // DOM ready helper
   function ready(fn) {
@@ -11,29 +9,35 @@
 
   ready(() => {
     const canvas = document.getElementById('bg-canvas');
-    if (!canvas) {
-      console.warn('bg-canvas not found.');
+    const ctx = canvas && canvas.getContext ? canvas.getContext('2d', { alpha: true }) : null;
+    if (!canvas || !ctx) {
+      console.warn('bg-canvas or 2D context not available.');
       return;
     }
-    const ctx = canvas.getContext('2d', { alpha: true });
-    let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
 
-    let blobs = [], particles = [], strips = [];
-    let noiseCanvas = null, scanlineCanvas = null;
+    // respect prefers-reduced-motion
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
+    let blobs = [], particles = [], strips = [], noiseCanvas = null, scanlineCanvas = null;
+    let last = performance.now();
 
     const config = {
       blobCountFactor: 1 / 700,
       particleDensity: 1 / 90,
       stripCountFactor: 1 / 700,
       colors: [
-        'rgba(31,174,138,', // main Amr-ish green
+        'rgba(31,174,138,', // main green-ish
         'rgba(86,196,168,',
         'rgba(150,225,205,'
       ],
       blobAlpha: 0.08,
       particleAlphaRange: [0.02, 0.12],
       particleRadiusRange: [3, 18],
-      fpsLimit: 60
+      fpsLimit: 60,
+      connectDistance: 140,        // max px between nodes to draw a line
+      connectLineWidth: 0.85,
+      connectColor: '31,174,138'  // r,g,b used to build rgba
     };
 
     function rand(min, max) { return Math.random() * (max - min) + min; }
@@ -58,7 +62,7 @@
 
     function createScanlineCanvas(w) {
       const c = document.createElement('canvas');
-      c.width = w;
+      c.width = Math.max(1, w);
       c.height = 3;
       const g = c.getContext('2d');
       g.fillStyle = 'rgba(255,255,255,0.02)';
@@ -128,6 +132,7 @@
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalCompositeOperation = 'source-over';
+        // subtle drift
         b.x += Math.sin(now / 7000 + b.phase) * 0.04;
         b.y += Math.cos(now / 9000 + b.phase) * 0.02;
       }
@@ -160,9 +165,11 @@
         ctx.fillStyle = `rgba(31,174,138,${p.alpha})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
+        // motion
         p.x += Math.cos(now / 1000 + p.wobble) * 0.02 + p.vx;
         p.y += p.vy;
         p.wobble += 0.01;
+        // reset when out of bounds
         if (p.y + p.r < -40 || p.x < -60 || p.x > W + 60) {
           p.x = rand(0, W);
           p.y = H + rand(10, 160);
@@ -173,6 +180,35 @@
           p.wobble = Math.random() * 1000;
         }
       }
+    }
+
+    // draw connecting lines between nearby particles
+    function drawConnections() {
+      const len = particles.length;
+      const maxDist = config.connectDistance;
+      const maxDist2 = maxDist * maxDist;
+      // simple O(n^2) check — good enough for modest counts
+      ctx.save();
+      ctx.lineWidth = config.connectLineWidth;
+      for (let i = 0; i < len; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < len; j++) {
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 <= maxDist2) {
+            const t = 1 - (d2 / maxDist2); // 0..1, stronger when closer
+            const alpha = Math.min(0.85, 0.02 + t * 0.28) * (a.alpha + b.alpha) * 0.9;
+            ctx.strokeStyle = `rgba(${config.connectColor},${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.restore();
     }
 
     function drawNoiseAndScanlines() {
@@ -188,10 +224,15 @@
       }
     }
 
-    // frame loop with fps limit
-    let last = performance.now();
+    // frame loop with fps limit and optional reduced-motion fallback
     const minDelta = 1000 / config.fpsLimit;
     function frame(now) {
+      if (reduced) {
+        // static single frame for reduced motion users
+        renderStatic();
+        return;
+      }
+
       const delta = now - last;
       if (delta < minDelta) {
         requestAnimationFrame(frame);
@@ -199,7 +240,7 @@
       }
       last = now;
 
-      // base gradient
+      // base gradient background
       const grad = ctx.createLinearGradient(0, 0, 0, H);
       grad.addColorStop(0, '#fbfdfe');
       grad.addColorStop(1, '#f6fafb');
@@ -209,9 +250,26 @@
       drawBlobs(now);
       drawStrips(now);
       drawParticles(now);
+      drawConnections();
       drawNoiseAndScanlines();
 
       requestAnimationFrame(frame);
+    }
+
+    function renderStatic() {
+      // draw a quiet non-animating background for reduced-motion
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, '#fbfdfe');
+      grad.addColorStop(1, '#f6fafb');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // draw one static set of blobs/particles/lines (no animation)
+      drawBlobs(performance.now());
+      drawStrips(performance.now());
+      drawParticles(performance.now());
+      drawConnections();
+      drawNoiseAndScanlines();
     }
 
     function resize() {
@@ -224,77 +282,40 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       initEntities();
+      // if reduced motion, render one static frame
+      if (reduced) renderStatic();
     }
 
-    function initEntities() {
-      blobs = []; particles = []; strips = [];
-      const blobCount = Math.max(2, Math.round((W * config.blobCountFactor)));
-      for (let i = 0; i < blobCount; i++) {
-        const baseR = rand(Math.min(W, H) * 0.12, Math.min(W, H) * 0.36);
-        blobs.push({
-          x: rand(-W * 0.2, W * 1.2),
-          y: rand(-H * 0.2, H * 1.2),
-          baseR,
-          r: baseR,
-          phase: Math.random() * Math.PI * 2,
-          speed: rand(0.0006, 0.002),
-          color: choose(config.colors)
-        });
-      }
-
-      const particleCount = Math.max(10, Math.round(W * config.particleDensity));
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: rand(0, W),
-          y: rand(0, H),
-          r: rand(config.particleRadiusRange[0], config.particleRadiusRange[1]),
-          alpha: rand(config.particleAlphaRange[0], config.particleAlphaRange[1]),
-          vx: rand(-0.08, 0.08),
-          vy: rand(-0.2, -0.02),
-          wobble: Math.random() * 1000
-        });
-      }
-
-      const stripCount = Math.max(3, Math.round(W * config.stripCountFactor));
-      for (let i = 0; i < stripCount; i++) {
-        strips.push({
-          x: rand(-W * 0.5, W * 1.5),
-          y: rand(0, H),
-          w: rand(160, 420),
-          a: rand(-0.18, -0.06),
-          speed: rand(0.02, 0.12),
-          alpha: rand(0.02, 0.08)
-        });
-      }
-
-      noiseCanvas = createNoiseCanvas(W, H);
-      scanlineCanvas = createScanlineCanvas(W);
-    }
-
-    // initial setup
+    // initial setup & handlers
     window.addEventListener('resize', () => {
       clearTimeout(window._bgResizeTimeout);
       window._bgResizeTimeout = setTimeout(resize, 120);
     });
-    resize();
-    requestAnimationFrame(frame);
 
-    // Small debug helpers
-    window.__bgAnim = { resize, regenerate: initEntities };
+    resize();
+    if (!reduced) requestAnimationFrame(frame);
+
+    // expose small debug helpers
+    window.__bgAnim = {
+      resize,
+      regenerate: initEntities,
+      config
+    };
 
     // --------- UI interactions & reveal-on-scroll ----------
     // set year
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // mobile nav toggle
+    // mobile nav toggle (use class + aria)
     const navToggle = document.getElementById('nav-toggle');
     const nav = document.getElementById('nav');
-    navToggle && navToggle.addEventListener('click', () => {
-      if (!nav) return;
-      const shown = getComputedStyle(nav).display !== 'none';
-      nav.style.display = shown ? 'none' : 'flex';
-    });
+    if (navToggle && nav) {
+      navToggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
 
     // smooth anchors
     document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -311,32 +332,46 @@
 
     // reveal on scroll with IntersectionObserver (staggered)
     const reveals = Array.from(document.querySelectorAll('.reveal'));
-    const ro = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          ro.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
+    if ('IntersectionObserver' in window) {
+      const ro = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            ro.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
 
-    reveals.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(0.55, i * 0.06)}s`;
-      ro.observe(el);
-    });
+      reveals.forEach((el, i) => {
+        el.style.transitionDelay = `${Math.min(0.55, i * 0.06)}s`;
+        ro.observe(el);
+      });
+    } else {
+      // fallback: reveal all
+      reveals.forEach(el => el.classList.add('in-view'));
+    }
 
     // hero pop
     const heroPop = document.querySelector('.hero-pop');
-    if (heroPop) setTimeout(() => heroPop.classList.add('in-view'), 380);
+    if (heroPop && !reduced) setTimeout(() => heroPop.classList.add('in-view'), 380);
+    else if (heroPop && reduced) heroPop.classList.add('in-view');
 
-    // contact form demo fallback handler
+    // contact form demo fallback handler (graceful)
     const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('contact-status');
     if (form) {
       form.addEventListener('submit', (e) => {
-        if (form.action.includes('formspree.io')) return;
+        if (form.action && form.action.includes('formspree.io')) return; // let real submit go through
         e.preventDefault();
-        alert('Thanks — your message has been received (demo).');
-        form.reset();
+        if (statusEl) {
+          statusEl.textContent = 'Thanks — your message has been received (demo).';
+          form.reset();
+          setTimeout(() => { statusEl.textContent = ''; }, 3500);
+        } else {
+          // fallback alert only if no status element
+          alert('Thanks — your message has been received (demo).');
+          form.reset();
+        }
       });
     }
   });
