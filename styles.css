@@ -80,8 +80,26 @@ body{
 .hero-sub{margin:0 0 1rem;color:var(--muted);font-size:1rem}
 .hero-ctas .btn{margin-right:0.5rem}
 
-/* buttons */
-.btn{background:linear-gradient(180deg,var(--accent-2), var(--accent));color:#002230;padding:0.55rem 0.9rem;border-radius:10px;text-decoration:none;border:0;font-weight:800}
+/* buttons - primary made very prominent and bright */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:0.55rem 0.95rem;
+  border-radius:12px;
+  text-decoration:none;
+  border:0;
+  font-weight:800;
+  cursor:pointer;
+}
+.btn-primary{
+  background: linear-gradient(180deg, #7fd4ff, var(--accent-2));
+  color:#002230;
+  box-shadow: 0 8px 30px rgba(56,192,255,0.16), 0 2px 8px rgba(124,92,255,0.06);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 14px 40px rgba(56,192,255,0.22); }
 .btn-ghost{background:transparent;border:2px solid rgba(255,255,255,0.06);color:var(--text-light)}
 
 /* portrait arch */
@@ -116,22 +134,10 @@ body{
 .lang-img{width:56px;height:56px;object-fit:contain;border-radius:8px;background:transparent}
 .lang-name{font-weight:700;color:var(--text-light);font-family:Inter,system-ui}
 
-/* tools */
-.tools-grid{margin-top:1rem}
-.tools-title{margin:0 0 0.5rem;font-weight:700;color:var(--accent-2)}
-.tools-row{display:flex;flex-wrap:wrap;gap:0.8rem}
-.tool-item{display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.02);padding:0.45rem 0.6rem;border-radius:10px;border-left:4px solid rgba(159,231,208,0.08)}
-.tool-img{width:40px;height:40px;object-fit:contain}
-.tool-name{font-family:Inter,system-ui;color:var(--text-light);font-weight:700}
-
-/* achievements, projects etc */
-.achievements{margin:0;padding-left:1.05rem}
-.grid{display:grid;gap:1rem}
-.projects-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-
-/* section divider */
-.section-divider{display:flex;align-items:center;justify-content:center;padding:1rem 0;pointer-events:none}
-.section-divider span{width:80%;height:2px;background:linear-gradient(90deg,transparent, rgba(63,170,255,0.12), transparent);box-shadow:0 0 12px rgba(31,120,200,0.02)}
+/* download CV */
+.download-card{display:flex;flex-direction:column;gap:0.8rem;align-items:flex-start}
+.download-actions{display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center}
+.small-note{font-size:0.9rem;color:var(--muted);margin-top:0.5rem}
 
 /* reveal animations */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .5s cubic-bezier(.2,.9,.3,1), transform .5s cubic-bezier(.2,.9,.3,1)}
@@ -149,7 +155,7 @@ body{
   font-size:0.95rem;
 }
 .contact-form input::placeholder,
-.contact-form textarea::placeholder { color: rgba(234,246,255,0.5); }
+.contact-form textarea::placeholder { color: rgba(234,246,255,0.55); }
 
 /* footer social */
 .site-footer{padding:1.25rem 0}
