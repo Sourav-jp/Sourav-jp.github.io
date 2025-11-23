@@ -1,5 +1,5 @@
-// Vertical-flow node-network background (blue theme) — increased brightness & glow
-// Particles move upward, wrap to bottom, and draw brighter glowing connection lines.
+// Vertical-flow node-network background (blue theme) — increased speed & brightness
+// Particles move upward faster, wrap to bottom, and draw brighter glowing connection lines.
 // Respects prefers-reduced-motion. Exposes window.__bgVerticalNetwork for tweaking.
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
@@ -28,18 +28,21 @@
     let particles = [];
     let rafId = null;
 
+    // Increased speed & brightness configuration
     const cfg = {
-      particleDensity: 1 / 60,   // increased density for brightness
-      minR: 2.0,
-      maxR: 6.0,
-      vxRange: 0.36,
-      vyMin: -2.0,               // faster upward motion
-      vyMax: -0.6,
-      connectDist: 180,         // longer connecting lines
-      lineWidth: 1.4,
-      color: { r: 120, g: 210, b: 255 }, // brighter cyan-blue
-      softBlobAlpha: 0.12,      // brighter soft blobs
-      particleAlphaBoost: 1.6   // multiplier to increase particle alpha visibility
+      particleDensity: 1 / 50,   // denser for stronger effect
+      minR: 2.4,
+      maxR: 6.6,
+      vxRange: 0.44,
+      vyMin: -3.5,               // much faster upward motion
+      vyMax: -0.9,
+      connectDist: 200,         // longer connecting lines
+      lineWidth: 1.6,
+      color: { r: 150, g: 230, b: 255 }, // very bright cyan-blue
+      softBlobAlpha: 0.16,      // brighter soft blobs
+      particleAlphaBoost: 1.8,  // boost alpha for more visibility
+      particleGlow: 18,         // shadow blur for particles
+      lineGlow: 22              // shadow blur for lines
     };
 
     function rand(min, max) { return Math.random() * (max - min) + min; }
@@ -59,7 +62,7 @@
 
     function initParticles() {
       particles = [];
-      const count = Math.max(20, Math.round(W * cfg.particleDensity));
+      const count = Math.max(26, Math.round(W * cfg.particleDensity));
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * W,
@@ -67,7 +70,7 @@
           r: rand(cfg.minR, cfg.maxR),
           vx: (Math.random() - 0.5) * cfg.vxRange,
           vy: rand(cfg.vyMin, cfg.vyMax),
-          a: Math.min(0.9, (0.06 + Math.random() * 0.36) * cfg.particleAlphaBoost)
+          a: Math.min(1.0, (0.08 + Math.random() * 0.42) * cfg.particleAlphaBoost)
         });
       }
     }
@@ -81,14 +84,14 @@
     }
 
     function drawSoftBlobs(t) {
-      const tt = t * 0.00014;
-      const b1 = { x: W * 0.16 + Math.sin(tt) * W * 0.03, y: H * 0.25, r: Math.min(W, H) * 0.34, a: cfg.softBlobAlpha };
-      const b2 = { x: W * 0.78 + Math.cos(tt * 1.05) * W * 0.04, y: H * 0.7, r: Math.min(W, H) * 0.26, a: cfg.softBlobAlpha * 0.95 };
+      const tt = t * 0.00012;
+      const b1 = { x: W * 0.14 + Math.sin(tt) * W * 0.035, y: H * 0.24, r: Math.min(W, H) * 0.36, a: cfg.softBlobAlpha };
+      const b2 = { x: W * 0.82 + Math.cos(tt * 1.05) * W * 0.04, y: H * 0.72, r: Math.min(W, H) * 0.28, a: cfg.softBlobAlpha * 0.95 };
 
       [b1, b2].forEach(b => {
         const grad = ctx.createRadialGradient(b.x, b.y, Math.max(2, b.r * 0.02), b.x, b.y, b.r);
         grad.addColorStop(0, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a})`);
-        grad.addColorStop(0.5, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a * 0.6})`);
+        grad.addColorStop(0.5, `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${b.a * 0.5})`);
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.globalCompositeOperation = 'screen';
         ctx.fillStyle = grad;
@@ -100,10 +103,9 @@
     }
 
     function drawParticles() {
-      // give particles a subtle glow via shadowBlur
       ctx.save();
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},0.55)`;
+      ctx.shadowBlur = cfg.particleGlow;
+      ctx.shadowColor = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},0.7)`;
       for (let p of particles) {
         ctx.beginPath();
         ctx.fillStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${p.a})`;
@@ -116,11 +118,10 @@
     function drawConnections() {
       const maxD2 = cfg.connectDist * cfg.connectDist;
       ctx.lineWidth = cfg.lineWidth;
-      // glow effect using shadow, draw brighter lines
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      ctx.shadowBlur = 14;
-      ctx.shadowColor = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},0.7)`;
+      ctx.shadowBlur = cfg.lineGlow;
+      ctx.shadowColor = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},0.85)`;
       for (let i = 0; i < particles.length; i++) {
         const a = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
@@ -130,7 +131,7 @@
           const d2 = dx * dx + dy * dy;
           if (d2 <= maxD2) {
             const t = 1 - (d2 / maxD2);
-            const alpha = Math.min(1.0, 0.04 + t * 0.6) * ((a.a + b.a) * 0.75);
+            const alpha = Math.min(1.0, 0.04 + t * 0.6) * ((a.a + b.a) * 0.85);
             ctx.strokeStyle = `rgba(${cfg.color.r},${cfg.color.g},${cfg.color.b},${alpha})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -140,24 +141,23 @@
         }
       }
       ctx.restore();
-      // restore composite handled by ctx.restore()
     }
 
     function updateParticles() {
       for (let p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-        // stronger wander because particles are brighter
-        p.vx += (Math.random() - 0.5) * 0.03;
-        p.vy += (Math.random() - 0.5) * 0.015;
+        // stronger wander for lively motion
+        p.vx += (Math.random() - 0.5) * 0.04;
+        p.vy += (Math.random() - 0.5) * 0.02;
         // wrap top -> bottom for vertical flow
-        if (p.y < -80) {
-          p.y = H + rand(10, 260);
+        if (p.y < -120) {
+          p.y = H + rand(10, 320);
           p.x = Math.random() * W;
           p.vy = rand(cfg.vyMin, cfg.vyMax);
         }
-        if (p.x < -60) p.x = W + 60;
-        if (p.x > W + 60) p.x = -60;
+        if (p.x < -80) p.x = W + 80;
+        if (p.x > W + 80) p.x = -80;
       }
     }
 
@@ -243,7 +243,7 @@
         entries.forEach(en => {
           if (en.isIntersecting) {
             const id = en.target.id;
-            const mapping = { hero: 'home', about: 'about', languages: 'skills', projects: 'projects', achievements: 'achievements', download: 'cv', contact: 'contact' };
+            const mapping = { hero: 'home', about: 'about', languages: 'skills', projects: 'projects', achievements: 'achievements', contact: 'contact' };
             const name = mapping[id] || '';
             setActiveNav(name);
           }
