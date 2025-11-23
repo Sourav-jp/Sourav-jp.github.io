@@ -1,6 +1,9 @@
-// script.js - Amr-style soft background animation tuned to blue theme
+// script.js - Amr Kahaleed inspired soft background:
+// soft radial blobs, drifting particles, subtle grain + scanlines,
+// plus UI interactions and reveal-on-scroll for the sections.
+
 (() => {
-  // wait until DOM ready to ensure canvas exists
+  // DOM ready helper
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
@@ -9,28 +12,23 @@
   ready(() => {
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) {
-      console.warn('bg-canvas element not found.');
+      console.warn('bg-canvas not found.');
       return;
     }
     const ctx = canvas.getContext('2d', { alpha: true });
     let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
 
-    // Entities
-    let blobs = [];
-    let particles = [];
-    let strips = [];
-    let noiseCanvas = null;
-    let scanlineCanvas = null;
+    let blobs = [], particles = [], strips = [];
+    let noiseCanvas = null, scanlineCanvas = null;
 
-    // Config - blue palette
     const config = {
       blobCountFactor: 1 / 700,
       particleDensity: 1 / 90,
       stripCountFactor: 1 / 700,
       colors: [
-        'rgba(46,168,255,',   // bright blue
-        'rgba(110,190,255,',  // soft sky blue
-        'rgba(90,150,255,'    // cooler indigo-blue
+        'rgba(31,174,138,', // main Amr-ish green
+        'rgba(86,196,168,',
+        'rgba(150,225,205,'
       ],
       blobAlpha: 0.08,
       particleAlphaRange: [0.02, 0.12],
@@ -38,11 +36,9 @@
       fpsLimit: 60
     };
 
-    // Helpers
     function rand(min, max) { return Math.random() * (max - min) + min; }
     function choose(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-    // Create offscreen noise canvas for subtle grain overlay
     function createNoiseCanvas(w, h) {
       const c = document.createElement('canvas');
       c.width = Math.max(1, Math.floor(w / 2));
@@ -50,7 +46,7 @@
       const g = c.getContext('2d');
       const img = g.createImageData(c.width, c.height);
       for (let i = 0; i < img.data.length; i += 4) {
-        const v = 200 + Math.floor(Math.random() * 30);
+        const v = 180 + Math.floor(Math.random() * 40);
         img.data[i] = v;
         img.data[i + 1] = v;
         img.data[i + 2] = v;
@@ -60,8 +56,7 @@
       return c;
     }
 
-    // Create subtle scanline canvas
-    function createScanlineCanvas(w, h) {
+    function createScanlineCanvas(w) {
       const c = document.createElement('canvas');
       c.width = w;
       c.height = 3;
@@ -74,9 +69,7 @@
     }
 
     function initEntities() {
-      blobs = [];
-      particles = [];
-      strips = [];
+      blobs = []; particles = []; strips = [];
 
       const blobCount = Math.max(2, Math.round((W * config.blobCountFactor)));
       for (let i = 0; i < blobCount; i++) {
@@ -118,27 +111,9 @@
       }
 
       noiseCanvas = createNoiseCanvas(W, H);
-      scanlineCanvas = createScanlineCanvas(W, H);
+      scanlineCanvas = createScanlineCanvas(W);
     }
 
-    // Resize handler
-    function resize() {
-      dpr = Math.max(1, window.devicePixelRatio || 1);
-      W = Math.max(300, window.innerWidth);
-      H = Math.max(300, window.innerHeight);
-      canvas.width = Math.floor(W * dpr);
-      canvas.height = Math.floor(H * dpr);
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initEntities();
-    }
-    window.addEventListener('resize', () => {
-      clearTimeout(window._bgResizeTimeout);
-      window._bgResizeTimeout = setTimeout(resize, 120);
-    });
-
-    // Drawing functions
     function drawBlobs(now) {
       for (const b of blobs) {
         b.phase += b.speed;
@@ -167,16 +142,14 @@
         ctx.rotate(s.a);
         const grad = ctx.createLinearGradient(0, 0, s.w, 0);
         grad.addColorStop(0, 'rgba(255,255,255,0)');
-        grad.addColorStop(0.45, `rgba(46,168,255,${s.alpha * 0.4})`);
-        grad.addColorStop(0.7, `rgba(110,190,255,${s.alpha * 0.25})`);
+        grad.addColorStop(0.45, `rgba(31,174,138,${s.alpha * 0.4})`);
+        grad.addColorStop(0.7, `rgba(86,196,168,${s.alpha * 0.25})`);
         grad.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, -H, s.w, H * 3);
         ctx.restore();
         s.x -= s.speed;
-        if (s.x + s.w < -W) {
-          s.x = W + Math.random() * W;
-        }
+        if (s.x + s.w < -W) s.x = W + Math.random() * W;
       }
       ctx.restore();
     }
@@ -184,7 +157,7 @@
     function drawParticles(now) {
       for (const p of particles) {
         ctx.beginPath();
-        ctx.fillStyle = `rgba(46,168,255,${p.alpha})`;
+        ctx.fillStyle = `rgba(31,174,138,${p.alpha})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
         p.x += Math.cos(now / 1000 + p.wobble) * 0.02 + p.vx;
@@ -210,14 +183,12 @@
       }
       if (scanlineCanvas) {
         ctx.globalAlpha = 0.06;
-        for (let y = 0; y < H; y += 3) {
-          ctx.drawImage(scanlineCanvas, 0, y);
-        }
+        for (let y = 0; y < H; y += 3) ctx.drawImage(scanlineCanvas, 0, y);
         ctx.globalAlpha = 1;
       }
     }
 
-    // Main loop with FPS limiting
+    // frame loop with fps limit
     let last = performance.now();
     const minDelta = 1000 / config.fpsLimit;
     function frame(now) {
@@ -227,7 +198,8 @@
         return;
       }
       last = now;
-      // base background
+
+      // base gradient
       const grad = ctx.createLinearGradient(0, 0, 0, H);
       grad.addColorStop(0, '#fbfdfe');
       grad.addColorStop(1, '#f6fafb');
@@ -242,11 +214,6 @@
       requestAnimationFrame(frame);
     }
 
-    // Initialize and start
-    function start() {
-      resize();
-      requestAnimationFrame(frame);
-    }
     function resize() {
       dpr = Math.max(1, window.devicePixelRatio || 1);
       W = Math.max(320, window.innerWidth);
@@ -259,19 +226,68 @@
       initEntities();
     }
 
-    // first-run
+    function initEntities() {
+      blobs = []; particles = []; strips = [];
+      const blobCount = Math.max(2, Math.round((W * config.blobCountFactor)));
+      for (let i = 0; i < blobCount; i++) {
+        const baseR = rand(Math.min(W, H) * 0.12, Math.min(W, H) * 0.36);
+        blobs.push({
+          x: rand(-W * 0.2, W * 1.2),
+          y: rand(-H * 0.2, H * 1.2),
+          baseR,
+          r: baseR,
+          phase: Math.random() * Math.PI * 2,
+          speed: rand(0.0006, 0.002),
+          color: choose(config.colors)
+        });
+      }
+
+      const particleCount = Math.max(10, Math.round(W * config.particleDensity));
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: rand(0, W),
+          y: rand(0, H),
+          r: rand(config.particleRadiusRange[0], config.particleRadiusRange[1]),
+          alpha: rand(config.particleAlphaRange[0], config.particleAlphaRange[1]),
+          vx: rand(-0.08, 0.08),
+          vy: rand(-0.2, -0.02),
+          wobble: Math.random() * 1000
+        });
+      }
+
+      const stripCount = Math.max(3, Math.round(W * config.stripCountFactor));
+      for (let i = 0; i < stripCount; i++) {
+        strips.push({
+          x: rand(-W * 0.5, W * 1.5),
+          y: rand(0, H),
+          w: rand(160, 420),
+          a: rand(-0.18, -0.06),
+          speed: rand(0.02, 0.12),
+          alpha: rand(0.02, 0.08)
+        });
+      }
+
+      noiseCanvas = createNoiseCanvas(W, H);
+      scanlineCanvas = createScanlineCanvas(W);
+    }
+
+    // initial setup
+    window.addEventListener('resize', () => {
+      clearTimeout(window._bgResizeTimeout);
+      window._bgResizeTimeout = setTimeout(resize, 120);
+    });
     resize();
     requestAnimationFrame(frame);
 
-    // Expose small debug helpers
-    window.__bgAnim = { resize: resize, regenerate: initEntities };
+    // Small debug helpers
+    window.__bgAnim = { resize, regenerate: initEntities };
 
-    // ---------------- UI interactions & reveals ----------------
+    // --------- UI interactions & reveal-on-scroll ----------
     // set year
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // nav toggle
+    // mobile nav toggle
     const navToggle = document.getElementById('nav-toggle');
     const nav = document.getElementById('nav');
     navToggle && navToggle.addEventListener('click', () => {
@@ -293,7 +309,7 @@
       });
     });
 
-    // reveal-on-scroll
+    // reveal on scroll with IntersectionObserver (staggered)
     const reveals = Array.from(document.querySelectorAll('.reveal'));
     const ro = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -305,7 +321,7 @@
     }, { threshold: 0.12 });
 
     reveals.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(0.45, i * 0.06)}s`;
+      el.style.transitionDelay = `${Math.min(0.55, i * 0.06)}s`;
       ro.observe(el);
     });
 
@@ -313,7 +329,7 @@
     const heroPop = document.querySelector('.hero-pop');
     if (heroPop) setTimeout(() => heroPop.classList.add('in-view'), 380);
 
-    // contact form fallback handler (demo)
+    // contact form demo fallback handler
     const form = document.getElementById('contact-form');
     if (form) {
       form.addEventListener('submit', (e) => {
